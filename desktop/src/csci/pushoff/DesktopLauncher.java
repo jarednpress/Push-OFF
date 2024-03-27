@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setWindowedMode(1600, 960);
 		config.setTitle("Push-OFF!");
+		config.setResizable(false);
 		new Lwjgl3Application(new GdxGameMain(), config);
 	}
 }
