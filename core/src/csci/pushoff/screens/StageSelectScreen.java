@@ -2,10 +2,11 @@ package csci.pushoff.screens;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
 import csci.pushoff.GdxGameMain;
@@ -15,7 +16,10 @@ public class StageSelectScreen implements Screen {
     private GdxGameMain game;
     private SpriteBatch batch;
     private BitmapFont font;
-    private Texture img; // You might want to use a specific texture for this screen
+    private ShapeRenderer shapeRenderer;
+    private Texture[] stagePreviews = new Texture[4]; // 4 stages
+    private Rectangle[] stageButtons = new Rectangle[4]; // 4 buttons
+    private int hoveredIndex = -1; // Index of the stage button being hovered over
 
     public StageSelectScreen(GdxGameMain game) {
         this.game = game;
@@ -25,32 +29,77 @@ public class StageSelectScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+        shapeRenderer = new ShapeRenderer();
         font.getData().setScale(2); // font size
-        img = new Texture("clouds.jpg"); // Placeholder stage selection background
+
+        // Initialize stage previews
+        for (int i = 0; i < stagePreviews.length; i++) {
+            stagePreviews[i] = new Texture(Gdx.files.internal("stage" + i + "Preview.jpg"));
+        }
+
+        float buttonWidth = 150;
+        float buttonHeight = 100;
+        float spacing = 50;
+        float totalWidth = stageButtons.length * buttonWidth + (stageButtons.length - 1) * spacing;
+        float startX = (Gdx.graphics.getWidth() - totalWidth) / 2; // Center horizontally
+
+        // Center buttons vertically
+        float startY = (Gdx.graphics.getHeight() - buttonHeight) / 2;
+
+        for (int i = 0; i < stageButtons.length; i++) {
+            float x = startX + i * (buttonWidth + spacing);
+            stageButtons[i] = new Rectangle(x, startY, buttonWidth, buttonHeight);
+        }
     }
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0, 1, 2, 1);
+
+        // Draw button outlines
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(0, 0, 0, 1); // Black
+        for (Rectangle rect : stageButtons) {
+            shapeRenderer.rect(rect.x, rect.y, rect.width, rect.height);
+        }
+        shapeRenderer.end();
+
         batch.begin();
 
-        // Display the background
-        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
         font.draw(batch, "Select Your Stage", Gdx.graphics.getWidth() / 2f - 100, Gdx.graphics.getHeight() * 0.75f);
+
+        float mouseX = Gdx.input.getX();
+        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY(); // LibGDX origin is top-left
+        hoveredIndex = -1;
+        for (int i = 0; i < stageButtons.length; i++) {
+            if (stageButtons[i].contains(mouseX, mouseY)) {
+                hoveredIndex = i;
+                // Enlarge the hovered stage preview
+                batch.draw(stagePreviews[i], 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+                break;
+            } else {
+                batch.draw(stagePreviews[i], stageButtons[i].x, stageButtons[i].y, stageButtons[i].width, stageButtons[i].height);
+            }
+        }
+
         batch.end();
 
-        if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            game.setScreen(new CharacterSelectScreen(game)); // Or move to the next logical screen in your game flow
+        // Change screens on click
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            if (hoveredIndex != -1) {
+                //before continuing, load time allows players to see chosen stage
+                try {
+                    Thread.sleep(600); //fake load time adjustment
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+                game.setScreen(new CharacterSelectScreen(game));
+            }
         }
     }
 
-    // Implement other required methods
-
     @Override
-    public void resize(int width, int height) {
-        // Adjust any components based on screen size changes
-    }
+    public void resize(int width, int height) {}
 
     @Override
     public void pause() {}
@@ -60,13 +109,16 @@ public class StageSelectScreen implements Screen {
 
     @Override
     public void hide() {
-        dispose(); // Optionally, dispose resources when hidden
+        dispose();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
         font.dispose();
-        img.dispose(); // Ensure you dispose of any resources you create
+        shapeRenderer.dispose();
+        for (Texture stagePreview : stagePreviews) {
+            stagePreview.dispose();
+        }
     }
 }
