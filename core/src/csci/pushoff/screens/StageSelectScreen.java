@@ -56,9 +56,8 @@ public class StageSelectScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 1, 2, 1);
 
-        // Draw button outlines
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(0, 0, 0, 1); // Black
+        shapeRenderer.setColor(0, 0, 0, 1); // Black for button outlines
         for (Rectangle rect : stageButtons) {
             shapeRenderer.rect(rect.x, rect.y, rect.width, rect.height);
         }
@@ -66,20 +65,25 @@ public class StageSelectScreen implements Screen {
 
         batch.begin();
 
+        // Draw "Select Your Stage" text
         font.draw(batch, "Select Your Stage", Gdx.graphics.getWidth() / 2f - 100, Gdx.graphics.getHeight() * 0.75f);
 
         float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY(); // LibGDX origin is top-left
+        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
         hoveredIndex = -1;
+
+        // Draw stage previews on the buttons
         for (int i = 0; i < stageButtons.length; i++) {
+            batch.draw(stagePreviews[i], stageButtons[i].x, stageButtons[i].y, stageButtons[i].width, stageButtons[i].height);
+
             if (stageButtons[i].contains(mouseX, mouseY)) {
                 hoveredIndex = i;
-                // Enlarge the hovered stage preview
-                batch.draw(stagePreviews[i], 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-                break;
-            } else {
-                batch.draw(stagePreviews[i], stageButtons[i].x, stageButtons[i].y, stageButtons[i].width, stageButtons[i].height);
             }
+        }
+
+        // Enlarge the hovered stage preview, if any
+        if (hoveredIndex != -1) {
+            batch.draw(stagePreviews[hoveredIndex], 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
 
         batch.end();
@@ -87,7 +91,7 @@ public class StageSelectScreen implements Screen {
         // Change screens on click
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (hoveredIndex != -1) {
-                //before continuing, load time allows players to see chosen stage
+                //before continuing, load time allows players to see stage selection
                 try {
                     Thread.sleep(600); //fake load time adjustment
                 } catch (InterruptedException e) {
@@ -97,6 +101,7 @@ public class StageSelectScreen implements Screen {
             }
         }
     }
+
 
     @Override
     public void resize(int width, int height) {}
