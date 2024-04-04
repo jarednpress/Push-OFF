@@ -5,6 +5,25 @@ import csci.pushoff.screens.TitleScreen;
 
 public class GdxGameMain extends Game {
 
+	private int playerOneCharacterIndex = -1;
+	private int playerTwoCharacterIndex = -1;
+
+	public void setPlayerOneCharacterIndex(int index) {
+		this.playerOneCharacterIndex = index;
+	}
+
+	public void setPlayerTwoCharacterIndex(int index) {
+		this.playerTwoCharacterIndex = index;
+	}
+
+	public int getPlayerOneCharacterIndex() {
+		return playerOneCharacterIndex;
+	}
+
+	public int getPlayerTwoCharacterIndex() {
+		return playerTwoCharacterIndex;
+	}
+
 	@Override
 	public void create() {
 		this.setScreen(new TitleScreen(this));

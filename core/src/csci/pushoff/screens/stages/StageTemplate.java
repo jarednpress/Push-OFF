@@ -13,7 +13,8 @@ public class StageTemplate implements Screen {
     private GdxGameMain game;
     private SpriteBatch batch;
     private BitmapFont font;
-    private Texture hudPlaceholder;
+    private Texture player1Icon;
+    private Texture player2Icon;
     private Texture dot; // Texture for the round indicators
 
     // Fixed dot size, doubled
@@ -29,7 +30,8 @@ public class StageTemplate implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-        hudPlaceholder = new Texture("placeholder.jpg");
+        player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.jpg");
+        player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.jpg");
         dot = new Texture("dot.jpg"); // Placeholder for dot texture
     }
 
@@ -40,8 +42,8 @@ public class StageTemplate implements Screen {
         batch.begin();
 
         float hudSize = largeDotSize;
-        batch.draw(hudPlaceholder, 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
-        batch.draw(hudPlaceholder, Gdx.graphics.getWidth() - hudSize - 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
+        batch.draw(player1Icon, 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
+        batch.draw(player2Icon, Gdx.graphics.getWidth() - hudSize - 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
 
         float centerX = Gdx.graphics.getWidth() / 2;
         float middleDotX = centerX - largeDotSize / 2; // Center the middle dot
@@ -81,7 +83,8 @@ public class StageTemplate implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        hudPlaceholder.dispose();
+        player1Icon.dispose();
+        player2Icon.dispose();
         dot.dispose();
     }
 }

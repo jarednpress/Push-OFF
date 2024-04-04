@@ -122,8 +122,8 @@ public class CharacterSelectScreen implements Screen {
 
             // Check if both players have selected
             if (playerOneSelection != -1 && playerTwoSelection != -1) {
-                playerOneSelection = -1; // Reset selection for demonstration
-                playerTwoSelection = -1;
+                game.setPlayerOneCharacterIndex(playerOneSelection);
+                game.setPlayerTwoCharacterIndex(playerTwoSelection);
                 //before continuing, load time allows players to see who the opponent chose
                 try {
                     Thread.sleep(600); //fake load time adjustment
