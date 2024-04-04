@@ -91,6 +91,7 @@ public class StageSelectScreen implements Screen {
         // Change screens on click
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             if (hoveredIndex != -1) {
+                game.setStageSelectionIndex(hoveredIndex);
                 //before continuing, load time allows players to see stage selection
                 try {
                     Thread.sleep(600); //fake load time adjustment

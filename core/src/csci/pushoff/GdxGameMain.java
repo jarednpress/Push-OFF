@@ -7,6 +7,11 @@ public class GdxGameMain extends Game {
 
 	private int playerOneCharacterIndex = -1;
 	private int playerTwoCharacterIndex = -1;
+	private int stageSelectionIndex = -1;
+
+	public void setStageSelectionIndex(int index){
+		this.stageSelectionIndex = index;
+	}
 
 	public void setPlayerOneCharacterIndex(int index) {
 		this.playerOneCharacterIndex = index;
@@ -22,6 +27,9 @@ public class GdxGameMain extends Game {
 
 	public int getPlayerTwoCharacterIndex() {
 		return playerTwoCharacterIndex;
+	}
+	public int getStageIndex() {
+		return stageSelectionIndex;
 	}
 
 	@Override

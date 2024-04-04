@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import csci.pushoff.GdxGameMain;
-import csci.pushoff.screens.stages.StageTemplate;
+import csci.pushoff.screens.stages.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -130,7 +130,19 @@ public class CharacterSelectScreen implements Screen {
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
-                game.setScreen(new StageTemplate(game)); // Loop back to StageSelectScreen for now
+                //this logic could be cleaned up, not very scalable
+                if (game.getStageIndex() == 0){
+                    game.setScreen(new StageZero(game));
+                }
+                else if (game.getStageIndex() == 1){
+                    game.setScreen(new StageOne(game));
+                }
+                else if (game.getStageIndex() == 2){
+                    game.setScreen(new StageTwo(game));
+                }
+                else{
+                    game.setScreen(new StageThree(game));
+                }
             }
         }
     }
