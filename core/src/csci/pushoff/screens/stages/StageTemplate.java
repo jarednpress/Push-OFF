@@ -126,7 +126,7 @@ public class StageTemplate implements Screen {
         }
     }
     protected void handleCharacterCollision(float delta) {
-        float distanceBetween = Math.abs(characterOne.x - characterTwo.x);
+        float distanceBetween = Math.abs(characterOne.x - (characterOne.getWidth()/1.5f) - characterTwo.x);
         float overlap = (characterOne.getWidth() / 2 + characterTwo.getWidth() / 2) - distanceBetween;
 
         if (overlap > 0) {
@@ -159,7 +159,7 @@ public class StageTemplate implements Screen {
             idleCharacter.x += moveAmount; // Push the idle character
         } else { // pusher is on the right
             pusher.x += overlap / 2;
-            idleCharacter.x -= moveAmount; 
+            idleCharacter.x -= moveAmount;
         }
     }
 
