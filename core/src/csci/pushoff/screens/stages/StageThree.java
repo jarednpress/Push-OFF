@@ -11,6 +11,7 @@ public class StageThree extends StageTemplate {
 
     public StageThree(GdxGameMain game) {
         super(game);
+        this.stageWidth = 1300; //will be different
     }
 
     @Override
@@ -24,7 +25,7 @@ public class StageThree extends StageTemplate {
     public void render(float delta) {
         batch.begin();
         batch.draw(background, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        batch.draw(platform, (Gdx.graphics.getWidth() - platform.getWidth()) / 2f, 0); // You'll need to set the correct Y position for the platform
+        batch.draw(platform, stageOffsetX, 0, stageWidth, 300);
         batch.end();
 
         // HUD
