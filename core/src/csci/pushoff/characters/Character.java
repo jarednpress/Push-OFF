@@ -1,6 +1,7 @@
 package csci.pushoff.characters;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public abstract class Character {
@@ -21,7 +22,8 @@ public abstract class Character {
     public float shoveKnockback;
     public float hitstunDuration;
     public float shieldStrength;
-    protected Texture texture;
+    protected TextureRegion texture;
+    protected boolean facingRight;
     protected float width, height;
 
     // Constructor
@@ -46,15 +48,17 @@ public abstract class Character {
     public void moveLeft(float delta) {
         x -= speed * delta;
         currentState = State.MOVING_LEFT;
+        facingRight = false;
     }
 
     public void moveRight(float delta) {
         x += speed * delta;
         currentState = State.MOVING_RIGHT;
+        facingRight = true;
     }
 
     public void dispose() {
-        if (texture != null) texture.dispose();
+        if (texture != null && texture.getTexture() != null) texture.getTexture().dispose();
     }
 
     // Methods for actions like shove, trip, block, etc., can also be abstract if they vary by character

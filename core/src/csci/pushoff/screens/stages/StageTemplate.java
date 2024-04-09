@@ -55,6 +55,7 @@ public class StageTemplate implements Screen {
         // Draw characters
         characterOne.draw(batch);
         characterTwo.draw(batch);
+        characterTwo.moveLeft(0);//face left
         batch.end();
 
         batch.begin();
