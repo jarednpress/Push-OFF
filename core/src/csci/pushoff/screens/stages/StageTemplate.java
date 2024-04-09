@@ -42,8 +42,8 @@ public class StageTemplate implements Screen {
         dot = new Texture("dot.jpg"); // Placeholder for dot texture
 
         stageOffsetX = (Gdx.graphics.getWidth() - stageWidth) / 2f;
-        characterOne = new Character1(stageOffsetX + 50, 300);
-        characterTwo = new Character2(stageOffsetX + stageWidth - 170, 300);
+        characterOne = new Character2(stageOffsetX + 50, 300);
+        characterTwo = new Character1(stageOffsetX + stageWidth - 170, 300);
     }
 
     @Override
@@ -55,6 +55,7 @@ public class StageTemplate implements Screen {
         // Draw characters
         characterOne.draw(batch);
         characterTwo.draw(batch);
+        characterOne.moveRight(0); //face right
         characterTwo.moveLeft(0);//face left
         batch.end();
 
@@ -97,6 +98,7 @@ public class StageTemplate implements Screen {
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             characterTwo.moveRight(delta);
         }
+        handleCharacterCollision(delta);
         checkCharacterStageBounds(characterOne);
         checkCharacterStageBounds(characterTwo);
     }
@@ -111,7 +113,6 @@ public class StageTemplate implements Screen {
         }
     }
 
-
     protected void characterFall(Character character, boolean fellOffLeft) {
         // Set the Y position to 0 since they've fallen
         character.y = 0;
@@ -124,6 +125,54 @@ public class StageTemplate implements Screen {
             character.x = stageOffsetX + stageWidth + 10; // 10 pixels away from the edge
         }
     }
+    protected void handleCharacterCollision(float delta) {
+        float distanceBetween = Math.abs(characterOne.x - characterTwo.x);
+        float overlap = (characterOne.getWidth() / 2 + characterTwo.getWidth() / 2) - distanceBetween;
+
+        if (overlap > 0) {
+            // Determine if either character is idle
+            boolean characterOneIdle = characterOne.currentState == Character.State.IDLE;
+            boolean characterTwoIdle = characterTwo.currentState == Character.State.IDLE;
+
+            // Push characters based on their states and speed
+            if (!characterOneIdle && !characterTwoIdle) resolveHeadOnCollision(overlap, delta);
+            else {
+                // One character is idle, determine the pusher and push accordingly
+                if (characterOneIdle) {
+                    pushCharacter(characterOne, characterTwo, delta, overlap);
+                } else {
+                    pushCharacter(characterTwo, characterOne, delta, overlap);
+                }
+            }
+        }
+    }
+
+
+    protected void pushCharacter(Character pusher, Character idleCharacter, float delta, float overlap) {
+        // If the idle character is being pushed, adjust the speed by their friction
+        float effectiveSpeed = pusher.speed * idleCharacter.friction;
+
+        // Calculate new position based on effective speed
+        float moveAmount = effectiveSpeed * delta;
+        if (pusher.x < idleCharacter.x) { // pusher is on the left
+            pusher.x -= overlap / 2; // Resolve overlap
+            idleCharacter.x += moveAmount; // Push the idle character
+        } else { // pusher is on the right
+            pusher.x += overlap / 2;
+            idleCharacter.x -= moveAmount; 
+        }
+    }
+
+
+    protected void resolveHeadOnCollision(float overlap, float delta) {
+        // Both characters are moving, split the overlap resolution and apply friction to speed
+        float characterOneEffectiveSpeed = characterOne.speed * characterTwo.friction;
+        float characterTwoEffectiveSpeed = characterTwo.speed * characterOne.friction;
+
+        characterOne.x -= (overlap / 2) + (characterOneEffectiveSpeed * delta);
+        characterTwo.x += (overlap / 2) + (characterTwoEffectiveSpeed * delta);
+    }
+
 
 
 
