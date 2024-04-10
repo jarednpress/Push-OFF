@@ -12,6 +12,8 @@ import com.badlogic.gdx.Input;
 import csci.pushoff.characters.Character;
 import csci.pushoff.characters.Character1;
 import csci.pushoff.characters.Character2;
+import csci.pushoff.screens.CharacterSelectScreen;
+import csci.pushoff.screens.WinScreen;
 
 public class StageTemplate implements Screen {
 
@@ -235,6 +237,11 @@ public class StageTemplate implements Screen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
+                    if (gameState.getScorePlayerOne() >= 3) {
+                        game.setScreen(new WinScreen(game));
+                    } else if (gameState.getScorePlayerTwo() >= 3) {
+                        game.setScreen(new WinScreen(game));
+                    }
                     resetStage();
                 }
             }, 2); // 2 seconds delay
