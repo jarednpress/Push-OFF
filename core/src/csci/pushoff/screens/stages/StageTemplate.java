@@ -101,17 +101,17 @@ public class StageTemplate implements Screen {
         }
 
         //player 2 controls
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_1)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
             characterTwo.moveLeft(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_3)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
             characterTwo.moveRight(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.K)) {
             characterTwo.currentState = Character.State.KICKING;
             performKick(characterTwo, characterOne);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.U)) {
             characterTwo.currentState = Character.State.BLOCKING_LOW;
         }
 
