@@ -85,23 +85,66 @@ public class StageTemplate implements Screen {
     }
 
     protected void updateCharacters(float delta) {
-        // Update character positions, states, etc.
+        // player 1 controls
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             characterOne.moveLeft(delta);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             characterOne.moveRight(delta);
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+            characterOne.currentState = Character.State.KICKING;
+            performKick(characterOne, characterTwo);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+            characterOne.currentState = Character.State.BLOCKING_LOW;
+        }
+
+        //player 2 controls
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             characterTwo.moveLeft(delta);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             characterTwo.moveRight(delta);
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            characterTwo.currentState = Character.State.KICKING;
+            performKick(characterTwo, characterOne);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            characterTwo.currentState = Character.State.BLOCKING_LOW;
+        }
+
         handleCharacterCollision(delta);
+
         checkCharacterStageBounds(characterOne);
         checkCharacterStageBounds(characterTwo);
     }
+
+    protected void performKick(Character kicker, Character receiver) {
+        if (kicker.currentState != Character.State.KICKING) return;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            receiver.currentState = Character.State.BLOCKING_LOW;
+        }
+
+        // Check if receiver is within kick range and not blocking low
+        float distanceBetween = Math.abs(kicker.x - receiver.x);
+        if (distanceBetween <= (kicker.getWidth() + receiver.getWidth()) / 2 && receiver.currentState != Character.State.BLOCKING_LOW) {
+            // The receiver is kicked instantly at half the kicker's knockback speed adjusted by receiver's friction
+            float knockbackDistance = (kicker.shoveKnockback / 2) * receiver.friction;
+
+            // Determine direction of the kick
+            if (kicker.getFacingRight()) {
+                receiver.x += knockbackDistance;
+            } else {
+                receiver.x -= knockbackDistance;
+            }
+
+            checkCharacterStageBounds(receiver);
+        }
+    }
+
 
     protected void checkCharacterStageBounds(Character character) {
         float characterMidpoint = character.x + character.getWidth() / 2f;

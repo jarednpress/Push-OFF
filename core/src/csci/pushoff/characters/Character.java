@@ -13,7 +13,7 @@ public abstract class Character {
 
     // Character state
     public enum State {
-        IDLE, MOVING_LEFT, MOVING_RIGHT, SHOVING, TRIPPING, BLOCKING_HIGH, BLOCKING_LOW
+        IDLE, MOVING_LEFT, MOVING_RIGHT, SHOVING, KICKING, BLOCKING_HIGH, BLOCKING_LOW
     }
     public State currentState = State.IDLE;
 
@@ -42,6 +42,7 @@ public abstract class Character {
     public float getWidth(){
         return this.width;
     }
+    public boolean getFacingRight() { return this.facingRight; }
 
     public abstract void draw(SpriteBatch batch);
 

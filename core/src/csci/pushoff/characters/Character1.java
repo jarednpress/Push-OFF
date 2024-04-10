@@ -1,24 +1,43 @@
-
 package csci.pushoff.characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Character1 extends Character {
-    //this is the evil little fat kid - short arms so cant shove hard
-    //but he is heavy with good traction
+    private TextureRegion kickTexture;
+    private TextureRegion blockLowTexture;
+
     public Character1(float x, float y) {
-        super(x, y, 200, 0.7f, 10f, 1f, 5f, 150, 150);
-        this.texture = new TextureRegion(new Texture("characterOneTexture.png"));
+        super(x, y, 200, 0.7f, 40f, 1f, 5f, 150, 150);
+        this.texture = new TextureRegion(new Texture(Gdx.files.internal("characterOneTexture.png")));
+        this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("characterOneKick.png")));
+        this.blockLowTexture = this.texture; // make low block sprite for here
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        if ((texture.isFlipX() && facingRight) || (!texture.isFlipX() && !facingRight)) {
-            texture.flip(true, false);
+        // Determine which texture to use based on the character's state
+        TextureRegion currentTexture = this.texture; // Default texture
+        if (this.currentState == State.KICKING) {
+            currentTexture = this.kickTexture;
+        } else if (this.currentState == State.BLOCKING_LOW) {
+            currentTexture = this.blockLowTexture;
         }
-        batch.draw(texture, x, y, width, height);
+
+        // Check if the texture needs to be flipped based on the character's facing direction
+        if ((currentTexture.isFlipX() && facingRight) || (!currentTexture.isFlipX() && !facingRight)) {
+            currentTexture.flip(true, false);
+        }
+
+        batch.draw(currentTexture, x, y, width, height);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        if (kickTexture != null && kickTexture.getTexture() != null) kickTexture.getTexture().dispose();
+        // dispose of low block texture also
+    }
 }
