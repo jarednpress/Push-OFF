@@ -24,6 +24,7 @@ public abstract class Character {
     public float shieldStrength;
     protected TextureRegion texture;
     protected boolean facingRight;
+    public boolean isFrozen = false;
     protected float width, height;
 
     // Constructor

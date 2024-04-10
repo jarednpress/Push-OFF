@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Timer;
 import csci.pushoff.GdxGameMain;
 import com.badlogic.gdx.Input;
 import csci.pushoff.characters.Character;
@@ -86,33 +87,51 @@ public class StageTemplate implements Screen {
 
     protected void updateCharacters(float delta) {
         // player 1 controls
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            characterOne.moveLeft(delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            characterOne.moveRight(delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            characterOne.currentState = Character.State.KICKING;
-            performKick(characterOne, characterTwo);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            characterOne.currentState = Character.State.BLOCKING_LOW;
+        if (!characterOne.isFrozen){
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                characterOne.moveLeft(delta);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                characterOne.moveRight(delta);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                characterOne.currentState = Character.State.KICKING;
+                performKick(characterOne, characterTwo);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                characterOne.currentState = Character.State.SHOVING;
+                performShove(characterOne, characterTwo);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                characterOne.currentState = Character.State.BLOCKING_LOW;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+                characterOne.currentState = Character.State.BLOCKING_HIGH;
+            }
         }
 
         //player 2 controls
-        if (Gdx.input.isKeyPressed(Input.Keys.J)) {
-            characterTwo.moveLeft(delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-            characterTwo.moveRight(delta);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-            characterTwo.currentState = Character.State.KICKING;
-            performKick(characterTwo, characterOne);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.U)) {
-            characterTwo.currentState = Character.State.BLOCKING_LOW;
+        if(!characterTwo.isFrozen){
+            if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+                characterTwo.moveLeft(delta);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+                characterTwo.moveRight(delta);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+                characterTwo.currentState = Character.State.KICKING;
+                performKick(characterTwo, characterOne);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.I)) {
+                characterTwo.currentState = Character.State.SHOVING;
+                performShove(characterTwo, characterOne);
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.U)) {
+                characterTwo.currentState = Character.State.BLOCKING_LOW;
+            }
+            if (Gdx.input.isKeyPressed(Input.Keys.O)) {
+                characterTwo.currentState = Character.State.BLOCKING_HIGH;
+            }
         }
 
         handleCharacterCollision(delta);
@@ -121,10 +140,23 @@ public class StageTemplate implements Screen {
         checkCharacterStageBounds(characterTwo);
     }
 
+    protected void freezeCharacter(Character character, float duration) {
+        character.isFrozen = true;
+
+        // Schedule a task to unfreeze the character after the given duration
+        Timer.schedule(new Timer.Task() {
+            @Override
+            public void run() {
+                character.isFrozen = false;
+            }
+        }, duration); // Duration is in seconds
+    }
+
+
     protected void performKick(Character kicker, Character receiver) {
         if (kicker.currentState != Character.State.KICKING) return;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.U)) {
             receiver.currentState = Character.State.BLOCKING_LOW;
         }
 
@@ -143,6 +175,35 @@ public class StageTemplate implements Screen {
 
             checkCharacterStageBounds(receiver);
         }
+    }
+
+    protected void performShove(Character shover, Character receiver) {
+        if (shover.currentState != Character.State.SHOVING) return;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.O)) {
+            receiver.currentState = Character.State.BLOCKING_HIGH;
+        }
+
+        // Check if receiver is within shove range and not blocking high
+        float distanceBetween = Math.abs(shover.x - receiver.x);
+        if (distanceBetween <= (shover.getWidth() + receiver.getWidth()) / 2 && receiver.currentState != Character.State.BLOCKING_HIGH) {
+            // The receiver is shoved instantly at the shover's knockback speed adjusted by receiver's friction
+            float knockbackDistance = (shover.shoveKnockback * receiver.friction) + 100;
+
+            // Determine direction of the shove
+            if (shover.getFacingRight()) {
+                receiver.x += knockbackDistance;
+            } else {
+                receiver.x -= knockbackDistance;
+            }
+
+            checkCharacterStageBounds(receiver);
+        }
+        float freezeDuration = shover.hitstunDuration;
+        if (receiver.currentState == Character.State.BLOCKING_HIGH) {
+            freezeDuration *= 2; // Double the duration if blocked high
+        }
+        freezeCharacter(shover, freezeDuration);
     }
 
 
