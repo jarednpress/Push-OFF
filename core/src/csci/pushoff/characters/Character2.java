@@ -8,12 +8,16 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class Character2 extends Character {
     private TextureRegion kickTexture;
     private TextureRegion blockLowTexture;
+    private TextureRegion shoveTexture;
+    private TextureRegion blockHighTexture;
 
     public Character2(float x, float y) {
-        super(x, y, 300, 0.4f, 45f, 1f, 5f, 70, 120);
+        super(x, y, 250, 0.4f, 45f, 1f, 5f, 70, 120);
         this.texture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoTexture.png")));
         this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoKick.png")));
-        this.blockLowTexture = this.texture; // make low block sprite for here
+        this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoLow.png")));
+        this.shoveTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoShove.png")));
+        this.blockHighTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoHigh.png")));
     }
 
     @Override
@@ -24,6 +28,10 @@ public class Character2 extends Character {
             currentTexture = this.kickTexture;
         } else if (this.currentState == State.BLOCKING_LOW) {
             currentTexture = this.blockLowTexture;
+        } else if (this.currentState == State.SHOVING)  {
+            currentTexture = this.shoveTexture;
+        } else if (this.currentState == State.BLOCKING_HIGH) {
+            currentTexture = this.blockHighTexture;
         }
 
         // Check if the texture needs to be flipped based on the character's facing direction
@@ -38,6 +46,6 @@ public class Character2 extends Character {
     public void dispose() {
         super.dispose();
         if (kickTexture != null && kickTexture.getTexture() != null) kickTexture.getTexture().dispose();
-        // dispose of low block texture also
+        // dispose of low block and other textures also
     }
 }

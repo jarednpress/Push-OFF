@@ -102,11 +102,11 @@ public class StageTemplate implements Screen {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 characterOne.currentState = Character.State.KICKING;
-                performKick(characterOne, characterTwo);
+                performAction(characterOne, characterTwo, true);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 characterOne.currentState = Character.State.SHOVING;
-                performShove(characterOne, characterTwo);
+                performAction(characterOne, characterTwo, false);
             }
         }
 
@@ -126,11 +126,11 @@ public class StageTemplate implements Screen {
             }
             if (Gdx.input.isKeyPressed(Input.Keys.K)) {
                 characterTwo.currentState = Character.State.KICKING;
-                performKick(characterTwo, characterOne);
+                performAction(characterTwo, characterOne, true);
             }
             if (Gdx.input.isKeyPressed(Input.Keys.I)) {
                 characterTwo.currentState = Character.State.SHOVING;
-                performShove(characterTwo, characterOne);
+                performAction(characterTwo, characterOne, false);
             }
         }
 
@@ -153,70 +153,37 @@ public class StageTemplate implements Screen {
     }
 
 
-    protected void performKick(Character kicker, Character receiver) {
-        if (kicker.currentState != Character.State.KICKING) return;
+    protected void performAction(Character initiator, Character receiver, boolean isKick) {
+        // `isKick` true for kick, false for shove
+        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.O)) {
+            receiver.currentState = Character.State.BLOCKING_HIGH;
+        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.U)) {
             receiver.currentState = Character.State.BLOCKING_LOW;
         }
 
-        // Check if receiver is within kick range and not blocking low
-        float distanceBetween = Math.abs(kicker.x - receiver.x);
-        float freezeDuration = 0;
-        if (distanceBetween <= (kicker.getWidth() + receiver.getWidth()) / 2) {
-            freezeDuration = (kicker.hitstunDuration) / 2;
-            if (receiver.currentState != Character.State.BLOCKING_LOW) {
-                // The receiver is kicked instantly at half the kicker's knockback speed adjusted by receiver's friction
-                float knockbackDistance = (kicker.shoveKnockback * receiver.friction) + kicker.shoveKnockback;
+        Character.State blockState = isKick ? Character.State.BLOCKING_LOW : Character.State.BLOCKING_HIGH;
+        float actionPenaltyMultiplier = isKick ? 1.0f : 1.6f; // Higher penalty for shove being blocked
 
-                // Determine direction of the kick
-                if (kicker.getFacingRight()) {
-                    receiver.x += knockbackDistance;
-                } else {
-                    receiver.x -= knockbackDistance;
-                }
-
-                checkCharacterStageBounds(receiver);
-                freezeCharacter(receiver, receiver.hitstunDuration / 4);
-            } else {
-                freezeCharacter(kicker, freezeDuration);
-            }
-        }
-        freezeCharacter(kicker, freezeDuration);
-    }
-
-    protected void performShove(Character shover, Character receiver) {
-        if (shover.currentState != Character.State.SHOVING) return;
-
-        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.O)) {
-            receiver.currentState = Character.State.BLOCKING_HIGH;
+        if (receiver.currentState == blockState) {
+            freezeCharacter(initiator, initiator.hitstunDuration * actionPenaltyMultiplier);
+            return; // Action blocked, early exit
         }
 
-        // Check if receiver is within shove range and not blocking high
-        float distanceBetween = Math.abs(shover.x - receiver.x);
-        if (distanceBetween <= (shover.getWidth() + receiver.getWidth()) / 2 && receiver.currentState != Character.State.BLOCKING_HIGH) {
-            // The receiver is shoved instantly at the shover's knockback speed adjusted by receiver's friction
-            float knockbackDistance = (shover.shoveKnockback * receiver.friction) + 100;
-
-            // Determine direction of the shove
-            if (shover.getFacingRight()) {
-                receiver.x += knockbackDistance;
-            } else {
-                receiver.x -= knockbackDistance;
-            }
-
+        // Compute knockback and perform action
+        float distanceBetween = Math.abs(initiator.x - receiver.x);
+        if (distanceBetween <= (initiator.getWidth() + receiver.getWidth()) / 2) {
+            float knockbackDistance = (initiator.shoveKnockback * receiver.friction) + (isKick ? 0 : 100);
+            receiver.x += initiator.getFacingRight() ? knockbackDistance : -knockbackDistance;
             checkCharacterStageBounds(receiver);
-
-            float freezeDuration = shover.hitstunDuration / 2;
-            if (receiver.currentState == Character.State.BLOCKING_HIGH) {
-                freezeCharacter(shover, freezeDuration * 1.6f);
-            }
-            else {
-                freezeCharacter(shover, freezeDuration * 0.8f);
-            }
-            freezeCharacter(receiver, freezeDuration);
+            freezeCharacter(receiver, initiator.hitstunDuration / 4); // Freeze receiver briefly
         }
+
+        // Always freeze the initiator after action
+        freezeCharacter(initiator, initiator.hitstunDuration / 2);
     }
+
 
 
     protected void checkCharacterStageBounds(Character character) {
