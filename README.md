@@ -1,5 +1,17 @@
 https://libgdx.com/wiki/start/a-simple-game
 
+
+
+Player 1 controls:
+
+![wasd](https://github.com/jarednpress/Push-OFF/assets/112017486/10abb39d-f694-46c3-ba94-30d1b37933d3)
+
+
+Player 2 Controls: 
+
+![numpad](https://github.com/jarednpress/Push-OFF/assets/112017486/6fbb6394-af42-4913-9d1d-7054f56ba729)
+
+
 here is how to run (double click on run in right-side gradle menu):
 
 
