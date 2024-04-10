@@ -96,22 +96,22 @@ public class StageTemplate implements Screen {
             characterOne.currentState = Character.State.KICKING;
             performKick(characterOne, characterTwo);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
             characterOne.currentState = Character.State.BLOCKING_LOW;
         }
 
         //player 2 controls
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_1)) {
             characterTwo.moveLeft(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_3)) {
             characterTwo.moveRight(delta);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_2)) {
             characterTwo.currentState = Character.State.KICKING;
             performKick(characterTwo, characterOne);
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
             characterTwo.currentState = Character.State.BLOCKING_LOW;
         }
 
@@ -124,7 +124,7 @@ public class StageTemplate implements Screen {
     protected void performKick(Character kicker, Character receiver) {
         if (kicker.currentState != Character.State.KICKING) return;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Q) || Gdx.input.isKeyPressed(Input.Keys.NUMPAD_4)) {
             receiver.currentState = Character.State.BLOCKING_LOW;
         }
 
