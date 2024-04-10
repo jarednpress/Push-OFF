@@ -1,3 +1,15 @@
+notes (TODO:)
+
+_____________
+
+make kick have stun
+
+make it so you cant move FORWARD and block
+
+spam is a problem
+
+controller support
+
 https://libgdx.com/wiki/start/a-simple-game
 
 
