@@ -3,6 +3,7 @@ package csci.pushoff;
 public class GameState {
     private int scorePlayerOne = 0;
     private int scorePlayerTwo = 0;
+    private boolean waitingForReset = false;
 
     // Increment score and check for wins
     public void incrementScore(boolean isPlayerOne) {
@@ -27,9 +28,16 @@ public class GameState {
         return scorePlayerTwo;
     }
 
-    // Reset the game state for a new round
+    public void setWaitingForReset(boolean waiting) {
+        this.waitingForReset = waiting;
+    }
+
+    public boolean isWaitingForReset() {
+        return waitingForReset;
+    }
+
+    // Reset the game state for a new round (unimplemented)
     public void reset() {
-        // This method can reset positions, states, and potentially scores if needed
     }
 }
 

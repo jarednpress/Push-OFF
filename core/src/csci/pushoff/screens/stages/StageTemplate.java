@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Timer;
+import csci.pushoff.GameState;
 import csci.pushoff.GdxGameMain;
 import com.badlogic.gdx.Input;
 import csci.pushoff.characters.Character;
@@ -20,10 +21,13 @@ public class StageTemplate implements Screen {
     protected Texture player1Icon;
     protected Texture player2Icon;
     protected Texture dot;
+    protected Texture dotWinTexture;
     protected Character characterOne;
     protected Character characterTwo;
     protected int stageWidth;
     protected float stageOffsetX;
+    protected GameState gameState;
+
 
     // Fixed dot size, doubled
     protected final float dotSize = 40f; // Size for normal dots
@@ -38,9 +42,11 @@ public class StageTemplate implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
+        gameState = new GameState();
         player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.jpg");
         player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.jpg");
-        dot = new Texture("dot.jpg"); // Placeholder for dot texture
+        dot = new Texture("dot.jpg");
+        dotWinTexture = new Texture("dotWin.jpg");
 
         stageOffsetX = (Gdx.graphics.getWidth() - stageWidth) / 2f;
         characterOne = new Character2(stageOffsetX + 50, 300);
@@ -66,21 +72,35 @@ public class StageTemplate implements Screen {
         batch.draw(player1Icon, 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
         batch.draw(player2Icon, Gdx.graphics.getWidth() - hudSize - 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
 
-        float twoNum = 2; //this seems ridiculous but it wouldn't run without
-        float centerX = Gdx.graphics.getWidth() / twoNum;
+        // Drawing dots
+        float centerX = Gdx.graphics.getWidth() / 2f;
         float middleDotX = centerX - largeDotSize / 2; // Center the middle dot
         float spaceBetweenDots = dotSpacing + dotSize; // Total space between the centers of the dots
 
-        // Draw the larger middle dot
-        batch.draw(dot, middleDotX, Gdx.graphics.getHeight() - largeDotSize - 20, largeDotSize, largeDotSize);
+        // Update drawing based on the current scores
+        int scorePlayerOne = gameState.getScorePlayerOne();
+        int scorePlayerTwo = gameState.getScorePlayerTwo();
 
-        // Draw the smaller dots to the left and right of the middle dot
-        for (int i = 1; i <= 2; i++) {
-            // Left side dots
-            batch.draw(dot, centerX - (spaceBetweenDots * i) - largeDotSize / 2, Gdx.graphics.getHeight() - dotSize - 20, dotSize, dotSize);
-            // Right side dots
-            batch.draw(dot, centerX + (spaceBetweenDots * i) - dotSize / 2, Gdx.graphics.getHeight() - dotSize - 20, dotSize, dotSize);
+        // Draw player one's dots
+        for (int i = 0; i < 2; i++) {
+            Texture currentTexture = i < scorePlayerOne ? dotWinTexture : dot;
+            batch.draw(currentTexture, centerX - (spaceBetweenDots * (i + 1)) - largeDotSize / 2, Gdx.graphics.getHeight() - dotSize - 20, dotSize, dotSize);
         }
+
+        // Draw player two's dots
+        for (int i = 0; i < 2; i++) {
+            Texture currentTexture = i < scorePlayerTwo ? dotWinTexture : dot;
+            batch.draw(currentTexture, centerX + (spaceBetweenDots * (i + 1)) - dotSize / 2, Gdx.graphics.getHeight() - dotSize - 20, dotSize, dotSize);
+        }
+
+        // Draw the middle dot. Change it if one player wins.
+        Texture middleDotTexture = dot;
+        if (scorePlayerOne >= 3 || scorePlayerTwo >= 3) {
+            middleDotTexture = dotWinTexture;
+        }
+        batch.draw(middleDotTexture, middleDotX, Gdx.graphics.getHeight() - largeDotSize - 20, largeDotSize, largeDotSize);
+
+
 
         batch.end();
     }
@@ -203,10 +223,25 @@ public class StageTemplate implements Screen {
         boolean fellOffLeft = characterMidpoint < stageOffsetX;
         boolean fellOffRight = characterMidpoint > (stageOffsetX + stageWidth);
 
-        if (fellOffLeft || fellOffRight) {
+        if ((fellOffLeft || fellOffRight) && !gameState.isWaitingForReset()) {
+            gameState.setWaitingForReset(true); // Prevent further score updates until reset
             characterFall(character, fellOffLeft);
+            if (character == characterOne) {
+                gameState.incrementScore(false); // Score for Player Two
+            } else if (character == characterTwo) {
+                gameState.incrementScore(true); // Score for Player One
+            }
+            // Delay reset to show who won the round
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    resetStage();
+                }
+            }, 2); // 2 seconds delay
         }
     }
+
+
 
     protected void characterFall(Character character, boolean fellOffLeft) {
         // Set the Y position to 0 since they've fallen
@@ -266,6 +301,23 @@ public class StageTemplate implements Screen {
 
         characterOne.x -= (overlap / 2) + (characterOneEffectiveSpeed * delta);
         characterTwo.x += (overlap / 2) + (characterTwoEffectiveSpeed * delta);
+    }
+
+
+    protected void resetStage() {
+        // Reset characters to their starting positions
+        characterOne.x = stageOffsetX + 50;
+        characterOne.y = 300;
+        characterTwo.x = stageOffsetX + stageWidth - 170;
+        characterTwo.y = 300;
+
+        characterOne.currentState = Character.State.IDLE;
+        characterTwo.currentState = Character.State.IDLE;
+
+        characterOne.isFrozen = false;
+        characterTwo.isFrozen = false;
+
+        gameState.setWaitingForReset(false); // Allow score updates again
     }
 
 
