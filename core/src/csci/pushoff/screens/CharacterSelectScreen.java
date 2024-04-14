@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import csci.pushoff.GdxGameMain;
 import csci.pushoff.screens.stages.*;
+import org.w3c.dom.Text;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +19,11 @@ public class CharacterSelectScreen implements Screen {
 
     private GdxGameMain game;
     private SpriteBatch batch;
-    private BitmapFont font;
+    private Texture font;
+    private Texture player_one_title;
+    private Texture player_two_title;
+    private float height;
+
     private ShapeRenderer shapeRenderer;
     private Texture[] characterPreviews = new Texture[4]; // 4 characters
     private Rectangle[] buttonRects = new Rectangle[8]; // 4 buttons per side
@@ -33,9 +38,11 @@ public class CharacterSelectScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        font = new Texture("Choose_Your_Character.png");
+        player_one_title = new Texture("Player_1.png ");
+        player_two_title = new Texture("Player_2.png ");
         shapeRenderer = new ShapeRenderer();
-        font.getData().setScale(2); // Adjust font size
+        //font.getData().setScale(2); // Adjust font size
 
         // Load character preview images
         for (int i = 0; i < characterPreviews.length; i++) {
@@ -50,7 +57,8 @@ public class CharacterSelectScreen implements Screen {
         for (int i = 0; i < buttonRects.length; i++) {
             float x = i < 4 ? (Gdx.graphics.getWidth() * 0.25f - buttonSize * 0.5f) : (Gdx.graphics.getWidth() * 0.75f - buttonSize * 0.5f);
             // Calculate starting y position to center buttons vertically
-            float startY = (Gdx.graphics.getHeight() - totalHeight) / 2 + totalHeight - buttonSize; // Top position of the top button
+            float startY = (Gdx.graphics.getHeight() - totalHeight) / 6 + totalHeight - buttonSize; // Top position of the top button
+            height = (Gdx.graphics.getHeight() - totalHeight) / 2.7f + totalHeight - buttonSize;
             float y = startY - (i % 4) * (buttonSize + spacing); // Adjust y for each button based on index
             buttonRects[i] = new Rectangle(x, y, buttonSize, buttonSize);
         }
@@ -72,7 +80,9 @@ public class CharacterSelectScreen implements Screen {
         }
 
         batch.begin();
-
+        //Draw in player one and two Subtitles
+        batch.draw(player_one_title,Gdx.graphics.getWidth() * 0.25f - player_one_title.getWidth() * 0.5f,  height);
+        batch.draw(player_two_title,Gdx.graphics.getWidth() * 0.75f - player_two_title.getWidth() * 0.5f, height);
         // Draw the enlarged image of the selected character for each player
         if (playerOneSelection != -1) {
             Texture selectedPreview = characterPreviews[playerOneSelection % characterPreviews.length];
@@ -103,7 +113,7 @@ public class CharacterSelectScreen implements Screen {
 
         batch.begin();
         // Draw "Select Your Character" text and the character preview images onto the buttons
-        font.draw(batch, "Select Your Character", Gdx.graphics.getWidth() / 2f - 150, Gdx.graphics.getHeight() - 20);
+        batch.draw(font,Gdx.graphics.getWidth() / 2f - font.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f);
         for (int i = 0; i < buttonRects.length; i++) {
             Rectangle rect = buttonRects[i];
             Texture preview = characterPreviews[i % characterPreviews.length];

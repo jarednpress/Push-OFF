@@ -238,9 +238,9 @@ public class StageTemplate implements Screen {
                 @Override
                 public void run() {
                     if (gameState.getScorePlayerOne() >= 3) {
-                        game.setScreen(new WinScreen(game));
+                        game.setScreen(new WinScreen(game,gameState));
                     } else if (gameState.getScorePlayerTwo() >= 3) {
-                        game.setScreen(new WinScreen(game));
+                        game.setScreen(new WinScreen(game,gameState));
                     }
                     resetStage();
                 }

@@ -15,7 +15,7 @@ public class StageSelectScreen implements Screen {
 
     private GdxGameMain game;
     private SpriteBatch batch;
-    private BitmapFont font;
+    private Texture font;
     private ShapeRenderer shapeRenderer;
     private Texture[] stagePreviews = new Texture[4]; // 4 stages
     private Rectangle[] stageButtons = new Rectangle[4]; // 4 buttons
@@ -28,9 +28,10 @@ public class StageSelectScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        font = new BitmapFont();
+        //font = new BitmapFont();
+        font = new Texture("Select_Your_Stage.png");
         shapeRenderer = new ShapeRenderer();
-        font.getData().setScale(2); // font size
+        //font.getData().setScale(2); // font size
 
         // Initialize stage previews
         for (int i = 0; i < stagePreviews.length; i++) {
@@ -66,7 +67,7 @@ public class StageSelectScreen implements Screen {
         batch.begin();
 
         // Draw "Select Your Stage" text
-        font.draw(batch, "Select Your Stage", Gdx.graphics.getWidth() / 2f - 100, Gdx.graphics.getHeight() * 0.75f);
+        batch.draw(font,Gdx.graphics.getWidth() / 2f - font.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f);
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
