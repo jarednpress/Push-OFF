@@ -24,7 +24,7 @@ public class TitleScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        img = new Texture("placeholder.jpg"); // logo image placeholder
+        img = new Texture("logo.png");
         font = new BitmapFont();
         font.getData().setScale(2); // Font size
     }
@@ -35,10 +35,12 @@ public class TitleScreen implements Screen {
         batch.begin();
 
         // Center the logo image
-        batch.draw(img, Gdx.graphics.getWidth() / 2f - img.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - img.getHeight() / 2f);
+        float x = Gdx.graphics.getWidth() / 2f - 250;
+        float y = Gdx.graphics.getHeight() / 2f - 250;
+        batch.draw(img, x, y, 500, 500);
 
         // Draw the title text above the logo
-        font.draw(batch, "Push-OFF!", Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() * 0.75f);
+        font.draw(batch, "Push-OFF!", Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() * 0.80f);
 
         batch.end();
 

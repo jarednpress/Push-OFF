@@ -39,8 +39,8 @@ public class CharacterSelectScreen implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new Texture("Choose_Your_Character.png");
-        player_one_title = new Texture("Player_1.png ");
-        player_two_title = new Texture("Player_2.png ");
+        player_one_title = new Texture("Player_1.png");
+        player_two_title = new Texture("Player_2.png");
         shapeRenderer = new ShapeRenderer();
         //font.getData().setScale(2); // Adjust font size
 
