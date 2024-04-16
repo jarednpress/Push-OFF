@@ -24,7 +24,7 @@ public class TitleScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        img = new Texture("logo.png");
+        img = new Texture("TitleBackground.png");
         font = new BitmapFont();
         font.getData().setScale(2); // Font size
     }
@@ -37,14 +37,15 @@ public class TitleScreen implements Screen {
         // Center the logo image
         float x = Gdx.graphics.getWidth() / 2f - 250;
         float y = Gdx.graphics.getHeight() / 2f - 250;
-        batch.draw(img, x, y, 500, 500);
-
+        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        System.out.println(Gdx.graphics.getWidth());
+        System.out.println(Gdx.graphics.getHeight());
         // Draw the title text above the logo
-        font.draw(batch, "Push-OFF!", Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() * 0.80f);
+        //font.draw(batch, "Start", Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() * 0.25f);
 
         batch.end();
 
-        if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
             game.setScreen(new StageSelectScreen(game));
         }
     }

@@ -23,9 +23,14 @@ public abstract class Character {
     public float hitstunDuration;
     public float shieldStrength;
     protected TextureRegion texture;
+    protected TextureRegion kickTexture;
+    protected TextureRegion blockLowTexture;
+    protected TextureRegion shoveTexture;
+    protected TextureRegion blockHighTexture;
     protected boolean facingRight;
     public boolean isFrozen = false;
     protected float width, height;
+
 
     // Constructor
     public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float shieldStrength, float width, float height) {
@@ -45,7 +50,7 @@ public abstract class Character {
     }
     public boolean getFacingRight() { return this.facingRight; }
 
-    public abstract void draw(SpriteBatch batch);
+    //public abstract void draw(SpriteBatch batch);
 
     public void moveLeft(float delta) {
         x -= speed * delta;
@@ -59,6 +64,26 @@ public abstract class Character {
         facingRight = true;
     }
 
+    public void draw(SpriteBatch batch) {
+        // Determine which texture to use based on the character's state
+        TextureRegion currentTexture = this.texture; // Default texture
+        if (this.currentState == State.KICKING) {
+            currentTexture = this.kickTexture;
+        } else if (this.currentState == State.BLOCKING_LOW) {
+            currentTexture = this.blockLowTexture;
+        } else if (this.currentState == State.SHOVING)  {
+            currentTexture = this.shoveTexture;
+        } else if (this.currentState == State.BLOCKING_HIGH) {
+            currentTexture = this.blockHighTexture;
+        }
+
+        // Check if the texture needs to be flipped based on the character's facing direction
+        if ((currentTexture.isFlipX() && facingRight) || (!currentTexture.isFlipX() && !facingRight)) {
+            currentTexture.flip(true, false);
+        }
+
+        batch.draw(currentTexture, x, y, width, height);
+    }
     public void dispose() {
         if (texture != null && texture.getTexture() != null) texture.getTexture().dispose();
     }
