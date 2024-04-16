@@ -10,6 +10,7 @@ import csci.pushoff.GameState;
 import csci.pushoff.GdxGameMain;
 import com.badlogic.gdx.Input;
 import csci.pushoff.characters.Character;
+import csci.pushoff.characters.CharacterFactory;
 import csci.pushoff.characters.FatMan;
 import csci.pushoff.characters.Baby;
 import csci.pushoff.screens.WinScreen;
@@ -50,8 +51,8 @@ public class StageTemplate implements Screen {
         dotWinTexture = new Texture("dotWin.jpg");
 
         stageOffsetX = (Gdx.graphics.getWidth() - stageWidth) / 2f;
-        playerOne = new Baby(stageOffsetX + 50, 300);
-        playerTwo = new FatMan(stageOffsetX + stageWidth - 170, 300);
+        playerOne = CharacterFactory.makeCharacter(game.getPlayerOneCharacterIndex(),stageOffsetX + 50, 300);
+        playerTwo = CharacterFactory.makeCharacter(game.getPlayerTwoCharacterIndex(), stageOffsetX + stageWidth - 170, 300);
     }
 
     @Override
