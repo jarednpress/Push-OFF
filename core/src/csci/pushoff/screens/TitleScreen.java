@@ -32,17 +32,11 @@ public class TitleScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 1, 2, 1); // RGB Value for title screen background
-        batch.begin();
 
-        // Center the logo image
-        float x = Gdx.graphics.getWidth() / 2f - 250;
-        float y = Gdx.graphics.getHeight() / 2f - 250;
+        batch.begin();
         batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         System.out.println(Gdx.graphics.getWidth());
         System.out.println(Gdx.graphics.getHeight());
-        // Draw the title text above the logo
-        //font.draw(batch, "Start", Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() * 0.25f);
-
         batch.end();
 
         if (Gdx.input.justTouched() || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {

@@ -22,6 +22,7 @@ public class CharacterSelectScreen implements Screen {
     private Texture font;
     private Texture player_one_title;
     private Texture player_two_title;
+    private Texture img;
     private float height;
 
     private ShapeRenderer shapeRenderer;
@@ -41,6 +42,7 @@ public class CharacterSelectScreen implements Screen {
         font = new Texture("Choose_Your_Character.png");
         player_one_title = new Texture("Player_1.png");
         player_two_title = new Texture("Player_2.png");
+        img = new Texture("selectionBackground.jpg");
         shapeRenderer = new ShapeRenderer();
         //font.getData().setScale(2); // Adjust font size
 
@@ -67,6 +69,10 @@ public class CharacterSelectScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 1, 2, 1);
+
+        batch.begin();
+        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
 
         // Determine which button, if any, is currently being hovered or selected
         hoveredIndex = -1;

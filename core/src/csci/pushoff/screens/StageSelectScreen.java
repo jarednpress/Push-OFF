@@ -17,6 +17,7 @@ public class StageSelectScreen implements Screen {
     private SpriteBatch batch;
     private Texture font;
     private ShapeRenderer shapeRenderer;
+    private Texture img;
     private Texture[] stagePreviews = new Texture[4]; // 4 stages
     private Rectangle[] stageButtons = new Rectangle[4]; // 4 buttons
     private int hoveredIndex = -1; // Index of the stage button being hovered over
@@ -28,15 +29,13 @@ public class StageSelectScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        //font = new BitmapFont();
         font = new Texture("Select_Your_Stage.png");
+        img = new Texture("selectionBackground.jpg");
         shapeRenderer = new ShapeRenderer();
-        //font.getData().setScale(2); // font size
-
-        // Initialize stage previews
-        for (int i = 0; i < stagePreviews.length; i++) {
-            stagePreviews[i] = new Texture(Gdx.files.internal("stage" + i + "Preview.jpg"));
-        }
+        stagePreviews[0] = new Texture(Gdx.files.internal("stage_zero_background.jpg"));
+        stagePreviews[1] = new Texture(Gdx.files.internal("stage_1_background.jpg"));
+        stagePreviews[2] = new Texture(Gdx.files.internal("stage_2_background.jpg"));
+        stagePreviews[3] = new Texture(Gdx.files.internal("stage_3_background.jpg"));
 
         float buttonWidth = 150;
         float buttonHeight = 100;
@@ -57,6 +56,29 @@ public class StageSelectScreen implements Screen {
     public void render(float delta) {
         ScreenUtils.clear(0, 1, 2, 1);
 
+        batch.begin();
+        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
+
+        float mouseX = Gdx.input.getX();
+        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
+        hoveredIndex = -1;
+
+        // Check which button is hovered
+        for (int i = 0; i < stageButtons.length; i++) {
+            if (stageButtons[i].contains(mouseX, mouseY)) {
+                hoveredIndex = i;
+            }
+        }
+
+        // Render enlarged stage preview first if any button is hovered
+        if (hoveredIndex != -1) {
+            batch.begin();
+            batch.draw(stagePreviews[hoveredIndex], 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            batch.end();
+        }
+
+        // Draw button outlines and stage previews in buttons
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(0, 0, 0, 1); // Black for button outlines
         for (Rectangle rect : stageButtons) {
@@ -65,28 +87,12 @@ public class StageSelectScreen implements Screen {
         shapeRenderer.end();
 
         batch.begin();
-
-        // Draw "Select Your Stage" text
-        batch.draw(font,Gdx.graphics.getWidth() / 2f - font.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f);
-
-        float mouseX = Gdx.input.getX();
-        float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        hoveredIndex = -1;
-
-        // Draw stage previews on the buttons
         for (int i = 0; i < stageButtons.length; i++) {
             batch.draw(stagePreviews[i], stageButtons[i].x, stageButtons[i].y, stageButtons[i].width, stageButtons[i].height);
-
-            if (stageButtons[i].contains(mouseX, mouseY)) {
-                hoveredIndex = i;
-            }
         }
 
-        // Enlarge the hovered stage preview, if any
-        if (hoveredIndex != -1) {
-            batch.draw(stagePreviews[hoveredIndex], 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        }
-
+        // Draw "Select Your Stage" text
+        batch.draw(font, Gdx.graphics.getWidth() / 2f - font.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f);
         batch.end();
 
         // Change screens on click
@@ -103,6 +109,7 @@ public class StageSelectScreen implements Screen {
             }
         }
     }
+
 
 
     @Override
