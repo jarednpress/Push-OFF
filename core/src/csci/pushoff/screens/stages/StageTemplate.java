@@ -51,8 +51,8 @@ public class StageTemplate implements Screen {
         dotWinTexture = new Texture("dotWin.jpg");
 
         stageOffsetX = (Gdx.graphics.getWidth() - stageWidth) / 2f;
-        playerOne = CharacterFactory.makeCharacter(game.getPlayerOneCharacterIndex(),stageOffsetX + 50, 300);
-        playerTwo = CharacterFactory.makeCharacter(game.getPlayerTwoCharacterIndex(), stageOffsetX + stageWidth - 170, 300);
+        playerOne = CharacterFactory.makeCharacter(game.getPlayerOneCharacterIndex(),stageOffsetX + 0.2f*stageWidth, 300);
+        playerTwo = CharacterFactory.makeCharacter(game.getPlayerTwoCharacterIndex(), stageOffsetX + 0.8f*stageWidth, 300);
     }
 
     @Override
@@ -221,7 +221,7 @@ public class StageTemplate implements Screen {
 
 
     protected void checkCharacterStageBounds(Character character) {
-        float characterMidpoint = character.x + character.getWidth() / 2f;
+        float characterMidpoint = character.x; //+character.getWidth() / 2f;
         boolean fellOffLeft = characterMidpoint < stageOffsetX;
         boolean fellOffRight = characterMidpoint > (stageOffsetX + stageWidth);
 
@@ -263,7 +263,8 @@ public class StageTemplate implements Screen {
         }
     }
     protected void handleCharacterCollision(float delta) {
-        float distanceBetween = Math.abs(playerOne.x - (playerOne.getWidth()/1.5f) - playerTwo.x);
+        //float distanceBetween = Math.abs(playerOne.x - (playerOne.getWidth()/1.5f) - playerTwo.x);
+        float distanceBetween = Math.abs(playerOne.x - playerTwo.x);
         float overlap = (playerOne.getWidth() / 2 + playerTwo.getWidth() / 2) - distanceBetween;
 
         if (overlap > 0) {
@@ -313,9 +314,9 @@ public class StageTemplate implements Screen {
 
     protected void resetStage() {
         // Reset characters to their starting positions
-        playerOne.x = stageOffsetX + 50;
+        playerOne.x = stageOffsetX + 0.2f*stageWidth;
         playerOne.y = 300;
-        playerTwo.x = stageOffsetX + stageWidth - 170;
+        playerTwo.x = stageOffsetX + 0.8f*stageWidth;
         playerTwo.y = 300;
 
         playerOne.currentState = Character.State.IDLE;
