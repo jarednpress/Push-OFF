@@ -8,11 +8,11 @@ public class FatMan extends Character {
 
     public FatMan(float x, float y) {
         super(x, y, 200, 0.7f, 40f, 1f, 5f, 150, 150);
-        this.texture = new TextureRegion(new Texture(Gdx.files.internal("characterOneTexture.png")));
-        this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("characterOneKick.png")));
-        this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("characterOneLow.png")));
-        this.shoveTexture = new TextureRegion(new Texture(Gdx.files.internal("characterOneShove.png")));
-        this.blockHighTexture = new TextureRegion(new Texture(Gdx.files.internal("characterOneHigh.png")));
+        this.texture = new TextureRegion(new Texture(Gdx.files.internal("fatman.png")));
+        this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("fatman_kick.png")));
+        this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("fatman_block_low.png")));
+        this.shoveTexture = new TextureRegion(new Texture(Gdx.files.internal("fatman_shove.png")));
+        this.blockHighTexture = new TextureRegion(new Texture(Gdx.files.internal("fatman_block_high.png")));
     }
 
 

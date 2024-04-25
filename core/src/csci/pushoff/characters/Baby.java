@@ -9,11 +9,11 @@ public class Baby extends Character {
 
     public Baby(float x, float y) {
         super(x, y, 250, 0.4f, 45f, 1f, 5f, 70, 120);
-        this.texture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoTexture.png")));
-        this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoKick.png")));
-        this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoLow.png")));
-        this.shoveTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoShove.png")));
-        this.blockHighTexture = new TextureRegion(new Texture(Gdx.files.internal("characterTwoHigh.png")));
+        this.texture = new TextureRegion(new Texture(Gdx.files.internal("baby.png")));
+        this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("baby_kick.png")));
+        this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("baby_block_low.png")));
+        this.shoveTexture = new TextureRegion(new Texture(Gdx.files.internal("baby_shove.png")));
+        this.blockHighTexture = new TextureRegion(new Texture(Gdx.files.internal("baby_block_high.png")));
     }
 
 
