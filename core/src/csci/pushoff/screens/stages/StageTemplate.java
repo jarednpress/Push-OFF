@@ -263,9 +263,7 @@ public class StageTemplate implements Screen {
         }
     }
     protected void handleCharacterCollision(float delta) {
-        float distanceBetween = Math.abs(playerOne.x - (playerOne.getWidth()/1.5f) - playerTwo.x);
-        //float distanceBetween = Math.abs(playerOne.x - playerTwo.x);
-        float overlap = (playerOne.getWidth() / 2 + playerTwo.getWidth() / 2) - distanceBetween;
+        float overlap = (playerOne.getWidth() / 2 + playerTwo.getWidth() / 2) - Math.abs((playerOne.x + playerOne.getWidth() / 2) - (playerTwo.x + playerTwo.getWidth() / 2));
 
         if (overlap > 0) {
             // Determine if either character is idle
