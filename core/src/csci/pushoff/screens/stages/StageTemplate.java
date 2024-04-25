@@ -205,9 +205,8 @@ public class StageTemplate implements Screen {
             return; // Action blocked, early exit
         }
 
-        // Compute knockback and perform action
-        float distanceBetween = Math.abs(initiator.x - receiver.x);
-        if (distanceBetween <= (initiator.getWidth() + receiver.getWidth()) / 2) {
+        float overlap = (playerOne.getWidth() / 2 + playerTwo.getWidth() / 2) - Math.abs((playerOne.x + playerOne.getWidth() / 2) - (playerTwo.x + playerTwo.getWidth() / 2));
+        if (overlap > -1) {
             float knockbackDistance = (initiator.shoveKnockback * receiver.friction) + (isKick ? 0 : 100);
             receiver.x += initiator.getFacingRight() ? knockbackDistance : -knockbackDistance;
             checkCharacterStageBounds(receiver);
