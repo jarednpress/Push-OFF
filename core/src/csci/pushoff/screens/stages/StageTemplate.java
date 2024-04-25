@@ -45,8 +45,8 @@ public class StageTemplate implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         gameState = new GameState();
-        player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.jpg");
-        player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.jpg");
+        player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.png");
+        player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.png");
         dot = new Texture("dot.jpg");
         dotWinTexture = new Texture("dotWin.jpg");
 

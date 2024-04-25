@@ -48,7 +48,7 @@ public class CharacterSelectScreen implements Screen {
 
         // Load character preview images
         for (int i = 0; i < characterPreviews.length; i++) {
-            characterPreviews[i] = new Texture(Gdx.files.internal("character" + i + "Preview.jpg"));
+            characterPreviews[i] = new Texture(Gdx.files.internal("character" + i + "Preview.png"));
         }
 
         float buttonSize = 100;
