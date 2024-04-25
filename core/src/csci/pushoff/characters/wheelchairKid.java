@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class wheelchairKid extends Character {
 
     public wheelchairKid(float x, float y) {
-        super(x, y, 200, 0.7f, 40f, 1f, 5f, 150, 150);
+        super(x, y, 300, 0.7f, 40f, 1f, 5f, 140, 155);
         this.texture = new TextureRegion(new Texture(Gdx.files.internal("wheelchairKid.png")));
         this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("wheelchairKid_kick.png")));
         this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("wheelchairKid_block_low.png")));

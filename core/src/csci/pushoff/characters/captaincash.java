@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class captaincash extends Character {
 
     public captaincash(float x, float y) {
-        super(x, y, 200, 0.7f, 40f, 1f, 5f, 150, 150);
+        super(x, y, 260, 0.7f, 40f, 1f, 5f, 80, 170);
         this.texture = new TextureRegion(new Texture(Gdx.files.internal("captaincash.png")));
         this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("captaincash_kick.png")));
         this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("captaincash_block_low.png")));
