@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public abstract class Character {
     // Position
     public float x, y;
-    //private float x_draw;
 
     // Movement speed
     public float speed;
@@ -68,7 +67,6 @@ public abstract class Character {
     public void draw(SpriteBatch batch) {
         // Determine which texture to use based on the character's state
         TextureRegion currentTexture = this.texture; // Default texture
-        float x_draw = this.x;
         if (this.currentState == State.KICKING) {
             currentTexture = this.kickTexture;
         } else if (this.currentState == State.BLOCKING_LOW) {
@@ -82,13 +80,9 @@ public abstract class Character {
         // Check if the texture needs to be flipped based on the character's facing direction
         if ((currentTexture.isFlipX() && facingRight) || (!currentTexture.isFlipX() && !facingRight)) {
             currentTexture.flip(true, false);
-            x_draw = this.x + width/2;
-        }
-        else{
-            x_draw = this.x -width/2;
         }
 
-        batch.draw(currentTexture, x_draw, y, width, height);
+        batch.draw(currentTexture, x, y, width, height);
     }
     public void dispose() {
         if (texture != null && texture.getTexture() != null) texture.getTexture().dispose();
