@@ -8,7 +8,7 @@ public class Baby extends Character {
 
 
     public Baby(float x, float y) {
-        super(x, y, 250, 0.4f, 45f, 1f, 5f, 70, 120);
+        super(x, y, 250, 0.4f, 45f, 1f, 5f, 70, 120, 0);
         this.texture = new TextureRegion(new Texture(Gdx.files.internal("baby.png")));
         this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("baby_kick.png")));
         this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("baby_block_low.png")));

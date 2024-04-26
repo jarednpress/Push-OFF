@@ -109,62 +109,72 @@ public class StageTemplate implements Screen {
 
     protected void updateCharacters(float delta) {
         // player 1 controls
-        if (!playerOne.isFrozen){
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)){
-                    delta = delta / 4;
+        playerOne.setFrames((int) (playerOne.getFrames() - 1));
+        if(playerOne.getFrames() < 1){
+            if (!playerOne.isFrozen) {
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                        delta = delta / 4;
+                    }
+                    playerOne.moveLeft(delta);
                 }
-                playerOne.moveLeft(delta);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)){
-                    delta = delta / 4;
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                        delta = delta / 4;
+                    }
+                    playerOne.moveRight(delta);
                 }
-                playerOne.moveRight(delta);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-                playerOne.currentState = Character.State.BLOCKING_LOW;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-                playerOne.currentState = Character.State.BLOCKING_HIGH;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                playerOne.currentState = Character.State.KICKING;
-                performAction(playerOne, playerTwo, true);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                playerOne.currentState = Character.State.SHOVING;
-                performAction(playerOne, playerTwo, false);
+                if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                    playerOne.currentState = Character.State.BLOCKING_LOW;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+                    playerOne.currentState = Character.State.BLOCKING_HIGH;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                    playerOne.currentState = Character.State.KICKING;
+                    performAction(playerOne, playerTwo, true);
+                    playerOne.setFrames(30);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                    playerOne.currentState = Character.State.SHOVING;
+                    performAction(playerOne, playerTwo, false);
+                    playerOne.setFrames(60);
+                }
             }
         }
 
         //player 2 controls
-        if(!playerTwo.isFrozen){
-            if (Gdx.input.isKeyPressed(Input.Keys.J)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)){
-                    delta = delta / 4;
+        playerTwo.setFrames((int) (playerTwo.getFrames() - 1));
+        if(playerTwo.getFrames() < 1) {
+            if (!playerTwo.isFrozen) {
+                if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)) {
+                        delta = delta / 4;
+                    }
+                    playerTwo.moveLeft(delta);
                 }
-                playerTwo.moveLeft(delta);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)){
-                    delta = delta / 4;
+                if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)) {
+                        delta = delta / 4;
+                    }
+                    playerTwo.moveRight(delta);
                 }
-                playerTwo.moveRight(delta);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.U)) {
-                playerTwo.currentState = Character.State.BLOCKING_LOW;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.O)) {
-                playerTwo.currentState = Character.State.BLOCKING_HIGH;
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-                playerTwo.currentState = Character.State.KICKING;
-                performAction(playerTwo, playerOne, true);
-            }
-            if (Gdx.input.isKeyPressed(Input.Keys.I)) {
-                playerTwo.currentState = Character.State.SHOVING;
-                performAction(playerTwo, playerOne, false);
+                if (Gdx.input.isKeyPressed(Input.Keys.U)) {
+                    playerTwo.currentState = Character.State.BLOCKING_LOW;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.O)) {
+                    playerTwo.currentState = Character.State.BLOCKING_HIGH;
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+                    playerTwo.currentState = Character.State.KICKING;
+                    performAction(playerTwo, playerOne, true);
+                    playerTwo.setFrames(30);
+                }
+                if (Gdx.input.isKeyPressed(Input.Keys.I)) {
+                    playerTwo.currentState = Character.State.SHOVING;
+                    performAction(playerTwo, playerOne, false);
+                    playerTwo.setFrames(60);
+                }
             }
         }
 

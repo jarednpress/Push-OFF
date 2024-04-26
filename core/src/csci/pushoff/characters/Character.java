@@ -30,10 +30,11 @@ public abstract class Character {
     protected boolean facingRight;
     public boolean isFrozen = false;
     protected float width, height;
+    protected int frames;
 
 
     // Constructor
-    public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float shieldStrength, float width, float height) {
+    public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float shieldStrength, float width, float height, int frames) {
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -43,6 +44,14 @@ public abstract class Character {
         this.shieldStrength = shieldStrength;
         this.width = width;
         this.height = height;
+        this.frames = frames; //frame counter makes character animations stick during recovery
+    }
+
+    public float getFrames(){
+        return this.frames;
+    }
+    public void setFrames(int f){
+        this.frames = f;
     }
 
     public float getWidth(){
@@ -65,23 +74,26 @@ public abstract class Character {
     }
 
     public void draw(SpriteBatch batch) {
-        // Determine which texture to use based on the character's state
         TextureRegion currentTexture = this.texture; // Default texture
-        if (this.currentState == State.KICKING) {
-            currentTexture = this.kickTexture;
-        } else if (this.currentState == State.BLOCKING_LOW) {
-            currentTexture = this.blockLowTexture;
-        } else if (this.currentState == State.SHOVING)  {
-            currentTexture = this.shoveTexture;
-        } else if (this.currentState == State.BLOCKING_HIGH) {
-            currentTexture = this.blockHighTexture;
+        if (frames < 1){
+            // Determine which texture to use based on the character's state
+            if (this.currentState == State.KICKING) {
+                currentTexture = this.kickTexture;
+            } else if (this.currentState == State.BLOCKING_LOW) {
+                currentTexture = this.blockLowTexture;
+            } else if (this.currentState == State.SHOVING)  {
+                currentTexture = this.shoveTexture;
+            } else if (this.currentState == State.BLOCKING_HIGH) {
+                currentTexture = this.blockHighTexture;
+            }
         }
-
+        else{
+            currentTexture = this.kickTexture;
+        }
         // Check if the texture needs to be flipped based on the character's facing direction
         if ((currentTexture.isFlipX() && facingRight) || (!currentTexture.isFlipX() && !facingRight)) {
             currentTexture.flip(true, false);
         }
-
         batch.draw(currentTexture, x, y, width, height);
     }
     public void dispose() {
