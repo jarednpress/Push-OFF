@@ -1,10 +1,12 @@
 package csci.pushoff.screens.stages;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Timer;
 import csci.pushoff.GameState;
 import csci.pushoff.GdxGameMain;
@@ -40,8 +42,17 @@ public class StageTemplate implements Screen {
     protected final float largeDotSize = dotSize * 2f; // Size for the larger middle dot
     protected final float dotSpacing = 60f; // Space between dots
 
+    private ShapeRenderer shapeRenderer;
+
+    // Constants for stamina bar
+    private static final float MAX_STAMINA = 400f;
+    private static final float STAMINA_BAR_WIDTH = 200f; // Double the icon width for example
+    private static final float STAMINA_BAR_HEIGHT = 20f;
+
     public StageTemplate(GdxGameMain game) {
         this.game = game;
+        // Initialization in constructor or show method
+        shapeRenderer = new ShapeRenderer();
     }
 
     @Override
@@ -68,8 +79,8 @@ public class StageTemplate implements Screen {
 
         updateCharacters(delta);
 
-        batch.begin();
         // Draw characters
+        batch.begin();
         playerOne.draw(batch);
         playerTwo.draw(batch);
         playerOne.moveRight(0); //face right
@@ -110,9 +121,27 @@ public class StageTemplate implements Screen {
         }
         batch.draw(middleDotTexture, middleDotX, Gdx.graphics.getHeight() - largeDotSize - 20, largeDotSize, largeDotSize);
 
-
+        float p1StaminaX = 10; // Same X as player 1 icon
+        float p2StaminaX = Gdx.graphics.getWidth() - STAMINA_BAR_WIDTH - 10; // Adjust for player 2
+        float staminaY = Gdx.graphics.getHeight() - largeDotSize - STAMINA_BAR_HEIGHT - 30; // Below the icon
 
         batch.end();
+
+        // Draw background and filled part of the stamina bar
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        // Draw background (black)
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(p1StaminaX, staminaY, STAMINA_BAR_WIDTH, STAMINA_BAR_HEIGHT);
+        shapeRenderer.rect(p2StaminaX, staminaY, STAMINA_BAR_WIDTH, STAMINA_BAR_HEIGHT);
+
+        // Draw filled part (red)
+        shapeRenderer.setColor(Color.RED);
+        float p1FillWidth = STAMINA_BAR_WIDTH * (playerOne.getStamina() / MAX_STAMINA);
+        float p2FillWidth = STAMINA_BAR_WIDTH * (playerTwo.getStamina() / MAX_STAMINA);
+        shapeRenderer.rect(p1StaminaX, staminaY, p1FillWidth, STAMINA_BAR_HEIGHT);
+        shapeRenderer.rect(p2StaminaX, staminaY, p2FillWidth, STAMINA_BAR_HEIGHT);
+        shapeRenderer.end();
+
     }
 
     protected void updateCharacters(float delta) {
@@ -365,6 +394,8 @@ public class StageTemplate implements Screen {
 
         playerOne.isFrozen = false;
         playerTwo.isFrozen = false;
+        playerOne.refillStamina();
+        playerTwo.refillStamina();
 
         gameState.setWaitingForReset(false); // Allow score updates again
     }

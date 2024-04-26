@@ -51,6 +51,7 @@ public abstract class Character {
 
     public float getStamina(){ return this.stamina; }
     public void addStamina(){ this.stamina += 1; }
+    public void refillStamina(){ this.stamina = 400; }
     public void loseStamina( int n ){ this.stamina -= n; }
 
     public float getFrames(){
