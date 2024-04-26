@@ -2,7 +2,6 @@ package csci.pushoff.screens;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,13 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import csci.pushoff.GdxGameMain;
 import csci.pushoff.screens.stages.*;
-import org.w3c.dom.Text;
-
-import java.util.concurrent.TimeUnit;
 
 public class CharacterSelectScreen implements Screen {
 
-    private GdxGameMain game;
+    protected GdxGameMain game;
     private SpriteBatch batch;
     private Texture font;
     private Texture player_one_title;
@@ -26,11 +22,10 @@ public class CharacterSelectScreen implements Screen {
     private float height;
 
     private ShapeRenderer shapeRenderer;
-    private Texture[] characterPreviews = new Texture[4]; // 4 characters
-    private Rectangle[] buttonRects = new Rectangle[8]; // 4 buttons per side
+    protected Texture[] characterPreviews = new Texture[4]; // 4 characters
+    protected Rectangle[] buttonRects = new Rectangle[8]; // 4 buttons per side
     private int playerOneSelection = -1;
     private int playerTwoSelection = -1;
-    private int hoveredIndex = -1; // Index of the button being hovered over
 
     public CharacterSelectScreen(GdxGameMain game) {
         this.game = game;
@@ -75,7 +70,8 @@ public class CharacterSelectScreen implements Screen {
         batch.end();
 
         // Determine which button, if any, is currently being hovered or selected
-        hoveredIndex = -1;
+        // Index of the button being hovered over
+        int hoveredIndex = -1;
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
         for (int i = 0; i < buttonRects.length; i++) {
@@ -92,22 +88,20 @@ public class CharacterSelectScreen implements Screen {
         // Draw the enlarged image of the selected character for each player
         if (playerOneSelection != -1) {
             Texture selectedPreview = characterPreviews[playerOneSelection % characterPreviews.length];
-            batch.draw(selectedPreview, 0, 0, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
+            batch.draw(selectedPreview, 0, 0, (float) Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
         }
         if (playerTwoSelection != -1) {
             Texture selectedPreview = characterPreviews[playerTwoSelection % characterPreviews.length];
-            batch.draw(selectedPreview, Gdx.graphics.getWidth() / 2, 0, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
+            batch.draw(selectedPreview, (float) Gdx.graphics.getWidth() / 2, 0, (float) Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
         }
 
         // Draw the hovered character preview, if a button is being hovered and no character is selected yet
         if (hoveredIndex != -1 && (playerOneSelection == -1 || playerTwoSelection == -1)) {
             Texture preview = characterPreviews[hoveredIndex % characterPreviews.length];
-            float previewX = hoveredIndex < 4 ? 0 : Gdx.graphics.getWidth() / 2;
-            batch.draw(preview, previewX, 0, Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
+            float previewX = hoveredIndex < 4 ? 0 : (float) Gdx.graphics.getWidth() / 2;
+            batch.draw(preview, previewX, 0, (float) Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight());
         }
-
         batch.end();
-
 
         batch.begin();
         // Draw "Select Your Character" text and the character preview images onto the buttons
@@ -119,14 +113,10 @@ public class CharacterSelectScreen implements Screen {
         }
         batch.end();
 
-
         // Handle button clicks for selecting characters
         if (hoveredIndex != -1 && Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            if (hoveredIndex < 4) {
-                playerOneSelection = hoveredIndex;
-            } else {
-                playerTwoSelection = hoveredIndex - 4;
-            }
+            if (hoveredIndex < 4) { playerOneSelection = hoveredIndex;
+            } else { playerTwoSelection = hoveredIndex - 4; }
 
             // Check if both players have selected
             if (playerOneSelection != -1 && playerTwoSelection != -1) {
@@ -158,7 +148,7 @@ public class CharacterSelectScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-        // i have window resizing off to make things simple, but it seems this has to be here
+        // I have window resizing off to make things simple, but it seems this has to be here
     }
 
     @Override

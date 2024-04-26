@@ -11,7 +11,6 @@ public class CharacterFactory {
                 return new wheelchairKid(x,y);
             default:
                 return  new FatMan(x,y);
-                // code block
         }
     }
 }

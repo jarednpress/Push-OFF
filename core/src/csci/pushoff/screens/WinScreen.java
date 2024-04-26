@@ -1,9 +1,7 @@
 package csci.pushoff.screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,8 +12,8 @@ import csci.pushoff.GdxGameMain;
 
 public class WinScreen implements Screen {
 
-    private GdxGameMain game;
-    private GameState gameState;
+    protected GdxGameMain game;
+    protected GameState gameState;
     private SpriteBatch batch;
     private Texture player1Icon;
     private Texture player2Icon;
@@ -88,6 +86,9 @@ public class WinScreen implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
+        img.dispose();
+        player_one_wins.dispose();
+        player_two_wins.dispose();
         player1Icon.dispose();
         player2Icon.dispose();
     }

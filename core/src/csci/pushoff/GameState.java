@@ -35,9 +35,5 @@ public class GameState {
     public boolean isWaitingForReset() {
         return waitingForReset;
     }
-
-    // Reset the game state for a new round (unimplemented)
-    public void reset() {
-    }
 }
 

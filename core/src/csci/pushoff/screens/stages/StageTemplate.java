@@ -13,8 +13,6 @@ import csci.pushoff.GdxGameMain;
 import com.badlogic.gdx.Input;
 import csci.pushoff.characters.Character;
 import csci.pushoff.characters.CharacterFactory;
-import csci.pushoff.characters.FatMan;
-import csci.pushoff.characters.Baby;
 import csci.pushoff.screens.WinScreen;
 
 public class StageTemplate implements Screen {
@@ -44,7 +42,7 @@ public class StageTemplate implements Screen {
     protected final float largeDotSize = dotSize * 2f; // Size for the larger middle dot
     protected final float dotSpacing = 60f; // Space between dots
 
-    private ShapeRenderer shapeRenderer;
+    protected ShapeRenderer shapeRenderer;
 
     // Constants for stamina bar
     private static final float MAX_STAMINA = 400f;
@@ -83,7 +81,7 @@ public class StageTemplate implements Screen {
 
         updateCharacters(delta);
 
-        // Draw characters
+        // Draw characters and face towards middle
         batch.begin();
         playerOne.draw(batch);
         playerTwo.draw(batch);
@@ -91,53 +89,46 @@ public class StageTemplate implements Screen {
         playerTwo.moveLeft(0);//face left
         batch.end();
 
+        // draw score-keeping dots
         batch.begin();
-
         float hudSize = largeDotSize;
         batch.draw(player1Icon, 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
         batch.draw(player2Icon, Gdx.graphics.getWidth() - hudSize - 10, Gdx.graphics.getHeight() - hudSize - 10, hudSize, hudSize);
-
         // Drawing dots
         float centerX = Gdx.graphics.getWidth() / 2f;
         float middleDotX = centerX - largeDotSize / 2; // Center the middle dot
         float spaceBetweenDots = dotSpacing + dotSize; // Total space between the centers of the dots
-
         // Update drawing based on the current scores
         int scorePlayerOne = gameState.getScorePlayerOne();
         int scorePlayerTwo = gameState.getScorePlayerTwo();
-
         // Draw player one's dots
         for (int i = 0; i < 2; i++) {
             Texture currentTexture = i < scorePlayerOne ? dotWinTexture : dot;
             batch.draw(currentTexture, centerX - (spaceBetweenDots * (i + 1)) - largeDotSize / 2, Gdx.graphics.getHeight() - dotSize - 20, dotSize, dotSize);
         }
-
         // Draw player two's dots
         for (int i = 0; i < 2; i++) {
             Texture currentTexture = i < scorePlayerTwo ? dotWinTexture : dot;
             batch.draw(currentTexture, centerX + (spaceBetweenDots * (i + 1)) - dotSize / 2, Gdx.graphics.getHeight() - dotSize - 20, dotSize, dotSize);
         }
-
         // Draw the middle dot. Change it if one player wins.
         Texture middleDotTexture = logoBlank;
         if (scorePlayerOne >= 3 || scorePlayerTwo >= 3) {
             middleDotTexture = logo;
         }
         batch.draw(middleDotTexture, middleDotX, Gdx.graphics.getHeight() - largeDotSize - 20, largeDotSize, largeDotSize);
+        batch.end();
 
+        //stamina bar
         float p1StaminaX = 10; // Same X as player 1 icon
         float p2StaminaX = Gdx.graphics.getWidth() - STAMINA_BAR_WIDTH - 10; // Adjust for player 2
         float staminaY = Gdx.graphics.getHeight() - largeDotSize - STAMINA_BAR_HEIGHT - 30; // Below the icon
-
-        batch.end();
-
         // Draw background and filled part of the stamina bar
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         // Draw background (black)
         shapeRenderer.setColor(Color.BLACK);
         shapeRenderer.rect(p1StaminaX, staminaY, STAMINA_BAR_WIDTH, STAMINA_BAR_HEIGHT);
         shapeRenderer.rect(p2StaminaX, staminaY, STAMINA_BAR_WIDTH, STAMINA_BAR_HEIGHT);
-
         // Draw filled part (red)
         shapeRenderer.setColor(Color.RED);
         float p1FillWidth = STAMINA_BAR_WIDTH * (playerOne.getStamina() / MAX_STAMINA);
@@ -145,7 +136,6 @@ public class StageTemplate implements Screen {
         shapeRenderer.rect(p1StaminaX, staminaY, p1FillWidth, STAMINA_BAR_HEIGHT);
         shapeRenderer.rect(p2StaminaX, staminaY, p2FillWidth, STAMINA_BAR_HEIGHT);
         shapeRenderer.end();
-
     }
 
     protected void updateCharacters(float delta) {
@@ -194,8 +184,10 @@ public class StageTemplate implements Screen {
                 }
             }
         }
-        else { freezeCharacter(playerOne, 3); }
-        if ((playerOne.getStamina() == p1StartStamina) && (playerOne.getStamina() < 400)) { playerOne.addStamina(); }
+        else { freezeCharacter(playerOne, 3); } //punishment for running out of stamina
+        if ((playerOne.getStamina() == p1StartStamina) && (playerOne.getStamina() < 400)) {
+            playerOne.addStamina(); // if character doesn't move and stamina isn't already full
+        }
 
         //player 2 controls
         float p2StartStamina = playerTwo.getStamina();
@@ -242,11 +234,13 @@ public class StageTemplate implements Screen {
                 }
             }
         }
-        else { freezeCharacter(playerTwo, 3); }
-        if ((playerTwo.getStamina() == p2StartStamina) && (playerTwo.getStamina() < 400)) { playerTwo.addStamina(); }
+        else { freezeCharacter(playerTwo, 3); } //punishment for running out of stamina
+        if ((playerTwo.getStamina() == p2StartStamina) && (playerTwo.getStamina() < 400)) {
+            playerTwo.addStamina(); // if character doesn't move and stamina isn't already full
+        }
 
+        // now that movement happened for this frame, see what's going on and react accordingly
         handleCharacterCollision(delta);
-
         checkCharacterStageBounds(playerOne, playerTwo);
         checkCharacterStageBounds(playerTwo, playerOne);
     }
@@ -262,7 +256,6 @@ public class StageTemplate implements Screen {
             }
         }, duration); // Duration is in seconds
     }
-
 
     protected void performAction(Character initiator, Character receiver, boolean isKick) {
         // `isKick` true for kick, false for shove
@@ -294,8 +287,6 @@ public class StageTemplate implements Screen {
         freezeCharacter(initiator, initiator.hitstunDuration / 2);
     }
 
-
-
     protected void checkCharacterStageBounds(Character character, Character opponent) {
         float characterMidpoint = character.x + character.getWidth() / 2f;
         boolean fellOffLeft = characterMidpoint < stageOffsetX;
@@ -303,12 +294,18 @@ public class StageTemplate implements Screen {
 
         if ((fellOffLeft || fellOffRight) && !gameState.isWaitingForReset()) {
             gameState.setWaitingForReset(true); // Prevent further score updates until reset
-            characterFall(character, fellOffLeft);
+
+            //set fallen character to be 10 pixels away from side they fell from
+            character.y = 0;
+            if (fellOffLeft) { character.x = stageOffsetX - character.getWidth() - 10;
+            } else { character.x = stageOffsetX + stageWidth + 10; }
+
             if (character == playerOne) {
                 gameState.incrementScore(false); // Score for Player Two
             } else if (character == playerTwo) {
                 gameState.incrementScore(true); // Score for Player One
             }
+
             // Delay reset to show who won the round
             freezeCharacter(opponent, 2);
             Timer.schedule(new Timer.Task() {
@@ -325,20 +322,6 @@ public class StageTemplate implements Screen {
         }
     }
 
-
-
-    protected void characterFall(Character character, boolean fellOffLeft) {
-        // Set the Y position to 0 since they've fallen
-        character.y = 0;
-
-        if (fellOffLeft) {
-            // Place the character to the left of the stage
-            character.x = stageOffsetX - character.getWidth() - 10; // 10 pixels away from the edge
-        } else {
-            // Place the character to the right of the stage
-            character.x = stageOffsetX + stageWidth + 10; // 10 pixels away from the edge
-        }
-    }
     protected void handleCharacterCollision(float delta) {
         float overlap = (playerOne.getWidth() / 2 + playerTwo.getWidth() / 2) - Math.abs((playerOne.x + playerOne.getWidth() / 2) - (playerTwo.x + playerTwo.getWidth() / 2));
 
@@ -347,8 +330,16 @@ public class StageTemplate implements Screen {
             boolean characterOneIdle = playerOne.currentState == Character.State.IDLE;
             boolean characterTwoIdle = playerTwo.currentState == Character.State.IDLE;
 
-            // Push characters based on their states and speed
-            if (!characterOneIdle && !characterTwoIdle) resolveHeadOnCollision(overlap, delta);
+            if (!characterOneIdle && !characterTwoIdle) {
+                //resolve head on collision
+                float characterOneEffectiveSpeed = playerOne.speed * playerTwo.friction;
+                float characterTwoEffectiveSpeed = playerTwo.speed * playerOne.friction;
+
+                // Both characters are moving, split the overlap resolution and apply friction to speed
+                playerOne.x -= (overlap / 2) + (characterOneEffectiveSpeed * delta);
+                playerTwo.x += (overlap / 2) + (characterTwoEffectiveSpeed * delta);
+            }
+
             else {
                 // One character is idle, determine the pusher and push accordingly
                 if (characterOneIdle) {
@@ -359,7 +350,6 @@ public class StageTemplate implements Screen {
             }
         }
     }
-
 
     protected void pushCharacter(Character pusher, Character idleCharacter, float delta, float overlap) {
         // If the idle character is being pushed, adjust the speed by their friction
@@ -375,17 +365,6 @@ public class StageTemplate implements Screen {
             idleCharacter.x -= moveAmount;
         }
     }
-
-
-    protected void resolveHeadOnCollision(float overlap, float delta) {
-        // Both characters are moving, split the overlap resolution and apply friction to speed
-        float characterOneEffectiveSpeed = playerOne.speed * playerTwo.friction;
-        float characterTwoEffectiveSpeed = playerTwo.speed * playerOne.friction;
-
-        playerOne.x -= (overlap / 2) + (characterOneEffectiveSpeed * delta);
-        playerTwo.x += (overlap / 2) + (characterTwoEffectiveSpeed * delta);
-    }
-
 
     protected void resetStage() {
         // Reset characters to their starting positions
@@ -404,8 +383,6 @@ public class StageTemplate implements Screen {
 
         gameState.setWaitingForReset(false); // Allow score updates again
     }
-
-
 
 
     @Override
@@ -429,5 +406,8 @@ public class StageTemplate implements Screen {
         player1Icon.dispose();
         player2Icon.dispose();
         dot.dispose();
+        dotWinTexture.dispose();
+        logo.dispose();
+        logoBlank.dispose();
     }
 }

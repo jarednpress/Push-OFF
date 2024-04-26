@@ -3,7 +3,6 @@ package csci.pushoff.screens;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -13,14 +12,13 @@ import csci.pushoff.GdxGameMain;
 
 public class StageSelectScreen implements Screen {
 
-    private GdxGameMain game;
+    protected GdxGameMain game;
     private SpriteBatch batch;
     private Texture font;
     private ShapeRenderer shapeRenderer;
     private Texture img;
-    private Texture[] stagePreviews = new Texture[4]; // 4 stages
-    private Rectangle[] stageButtons = new Rectangle[4]; // 4 buttons
-    private int hoveredIndex = -1; // Index of the stage button being hovered over
+    protected Texture[] stagePreviews = new Texture[4]; // 4 stages
+    protected Rectangle[] stageButtons = new Rectangle[4]; // 4 buttons
 
     public StageSelectScreen(GdxGameMain game) {
         this.game = game;
@@ -62,7 +60,8 @@ public class StageSelectScreen implements Screen {
 
         float mouseX = Gdx.input.getX();
         float mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-        hoveredIndex = -1;
+        // Index of the stage button being hovered over
+        int hoveredIndex = -1;
 
         // Check which button is hovered
         for (int i = 0; i < stageButtons.length; i++) {

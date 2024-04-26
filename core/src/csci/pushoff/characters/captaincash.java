@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class captaincash extends Character {
 
     public captaincash(float x, float y) {
-        super(x, y, 260, 0.7f, 40f, 1f, 5f, 80, 170, 0);
+        super(x, y, 260, 0.7f, 40f, 1f, 400, 80, 170, 0);
         this.texture = new TextureRegion(new Texture(Gdx.files.internal("captaincash.png")));
         this.kickTexture = new TextureRegion(new Texture(Gdx.files.internal("captaincash_kick.png")));
         this.blockLowTexture = new TextureRegion(new Texture(Gdx.files.internal("captaincash_block_low.png")));
@@ -19,7 +19,5 @@ public class captaincash extends Character {
     @Override
     public void dispose() {
         super.dispose();
-        //if (kickTexture != null && kickTexture.getTexture() != null) kickTexture.getTexture().dispose();
-        // dispose of low block and other textures also
     }
 }

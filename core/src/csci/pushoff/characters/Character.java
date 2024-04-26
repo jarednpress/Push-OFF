@@ -1,6 +1,5 @@
 package csci.pushoff.characters;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -21,7 +20,6 @@ public abstract class Character {
     public float friction;
     public float shoveKnockback;
     public float hitstunDuration;
-    public float shieldStrength;
     protected TextureRegion texture;
     protected TextureRegion kickTexture;
     protected TextureRegion blockLowTexture;
@@ -35,18 +33,17 @@ public abstract class Character {
 
 
     // Constructor
-    public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float shieldStrength, float width, float height, float frames) {
+    public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float stamina, float width, float height, float frames) {
         this.x = x;
         this.y = y;
         this.speed = speed;
         this.friction = friction;
         this.shoveKnockback = shoveKnockback;
         this.hitstunDuration = hitstunDuration;
-        this.shieldStrength = shieldStrength;
         this.width = width;
         this.height = height;
         this.frames = frames; //frame counter makes character animations stick during recovery
-        this.stamina = 400;
+        this.stamina = stamina;
     }
 
     public float getStamina(){ return this.stamina; }
