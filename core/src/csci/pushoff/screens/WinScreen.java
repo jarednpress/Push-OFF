@@ -17,9 +17,11 @@ public class WinScreen implements Screen {
     private GdxGameMain game;
     private GameState gameState;
     private SpriteBatch batch;
-    private Texture img;
+    private Texture player1Icon;
+    private Texture player2Icon;
     private Texture player_one_wins;
     private Texture player_two_wins;
+    private Texture img;
     private BitmapFont font;
 
     public WinScreen(GdxGameMain game, GameState gameState) {
@@ -31,7 +33,9 @@ public class WinScreen implements Screen {
     @Override
     public void show() {
         batch = new SpriteBatch();
-        img = new Texture("placeholder.jpg"); // logo image placeholder
+        img = new Texture("selectionBackground.jpg");
+        player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.png");
+        player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.png");
         player_one_wins = new Texture("Player_1_wins.png");
         player_two_wins = new Texture("Player_2_wins.png");
         font = new BitmapFont();
@@ -40,18 +44,20 @@ public class WinScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 1, 2, 1); // RGB Value for title screen background
+        ScreenUtils.clear(0, 1, 2, 1);
+
+        batch.begin();
+        batch.draw(img, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
+
         batch.begin();
 
-        // Center the logo image
-        batch.draw(img, Gdx.graphics.getWidth() / 2f - img.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - img.getHeight() / 2f);
-
-        // Draw the title text above the logo
-        //ont.draw(batch, "GAME OVER", Gdx.graphics.getWidth() / 2f - 60, Gdx.graphics.getHeight() * 0.75f);
         if(gameState.getScorePlayerOne()>gameState.getScorePlayerTwo()){
+            batch.draw(player1Icon, Gdx.graphics.getWidth() / 2f - player2Icon.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - player1Icon.getHeight() / 2f);
             batch.draw(player_one_wins,Gdx.graphics.getWidth() / 2f - player_one_wins.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f );
         }
         else{
+            batch.draw(player2Icon, Gdx.graphics.getWidth() / 2f - player2Icon.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - player2Icon.getHeight() / 2f);
             batch.draw(player_two_wins,Gdx.graphics.getWidth() / 2f - player_two_wins.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f );
         }
 
@@ -81,7 +87,8 @@ public class WinScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-        img.dispose();
         font.dispose();
+        player1Icon.dispose();
+        player2Icon.dispose();
     }
 }
