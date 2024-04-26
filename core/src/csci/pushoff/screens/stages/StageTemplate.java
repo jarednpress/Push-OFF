@@ -28,6 +28,10 @@ public class StageTemplate implements Screen {
     protected Character playerTwo;
     protected int stageWidth;
     protected float stageOffsetX;
+    protected float p1Width;
+    protected float p1WidthWide;
+    protected float p2Width;
+    protected float p2WidthWide;
     protected GameState gameState;
 
 
@@ -53,6 +57,10 @@ public class StageTemplate implements Screen {
         stageOffsetX = (Gdx.graphics.getWidth() - stageWidth) / 2f;
         playerOne = CharacterFactory.makeCharacter(game.getPlayerOneCharacterIndex(),stageOffsetX + 50, 300);
         playerTwo = CharacterFactory.makeCharacter(game.getPlayerTwoCharacterIndex(), stageOffsetX + stageWidth - 170, 300);
+        p1Width = playerOne.getWidth();
+        p1WidthWide = p1Width + 30;
+        p2Width = playerTwo.getWidth();
+        p2WidthWide = p2Width + 30;
     }
 
     @Override
@@ -109,7 +117,9 @@ public class StageTemplate implements Screen {
 
     protected void updateCharacters(float delta) {
         // player 1 controls
-        playerOne.setFrames((int) (playerOne.getFrames() - 1));
+        if (playerOne.getFrames() > 1){ playerOne.setWidth(p1WidthWide); }
+        else{playerOne.setWidth(p1Width);}
+        playerOne.setFrames(playerOne.getFrames() - 1);
         if(playerOne.getFrames() < 1){
             if (!playerOne.isFrozen) {
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) {
@@ -138,13 +148,15 @@ public class StageTemplate implements Screen {
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                     playerOne.currentState = Character.State.SHOVING;
                     performAction(playerOne, playerTwo, false);
-                    playerOne.setFrames(60);
+                    playerOne.setFrames(60.5f); //.5 is to identify shove
                 }
             }
         }
 
         //player 2 controls
-        playerTwo.setFrames((int) (playerTwo.getFrames() - 1));
+        if (playerTwo.getFrames() > 1){ playerTwo.setWidth(p2WidthWide); }
+        else{playerTwo.setWidth(p2Width);}
+        playerTwo.setFrames(playerTwo.getFrames() - 1);
         if(playerTwo.getFrames() < 1) {
             if (!playerTwo.isFrozen) {
                 if (Gdx.input.isKeyPressed(Input.Keys.J)) {
@@ -173,7 +185,7 @@ public class StageTemplate implements Screen {
                 if (Gdx.input.isKeyPressed(Input.Keys.I)) {
                     playerTwo.currentState = Character.State.SHOVING;
                     performAction(playerTwo, playerOne, false);
-                    playerTwo.setFrames(60);
+                    playerTwo.setFrames(60.5f); //.5 is to identify shove
                 }
             }
         }

@@ -30,11 +30,11 @@ public abstract class Character {
     protected boolean facingRight;
     public boolean isFrozen = false;
     protected float width, height;
-    protected int frames;
+    protected float frames;
 
 
     // Constructor
-    public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float shieldStrength, float width, float height, int frames) {
+    public Character(float x, float y, float speed, float friction, float shoveKnockback, float hitstunDuration, float shieldStrength, float width, float height, float frames) {
         this.x = x;
         this.y = y;
         this.speed = speed;
@@ -50,8 +50,12 @@ public abstract class Character {
     public float getFrames(){
         return this.frames;
     }
-    public void setFrames(int f){
+    public void setFrames(float f){
         this.frames = f;
+    }
+
+    public void setWidth(float w){
+        this.width = w;
     }
 
     public float getWidth(){
@@ -88,7 +92,10 @@ public abstract class Character {
             }
         }
         else{
-            currentTexture = this.kickTexture;
+            if (frames % 1 != 0){
+                currentTexture = this.shoveTexture;
+            }
+            else{ currentTexture = this.kickTexture; }
         }
         // Check if the texture needs to be flipped based on the character's facing direction
         if ((currentTexture.isFlipX() && facingRight) || (!currentTexture.isFlipX() && !facingRight)) {
