@@ -78,14 +78,6 @@ public class StageSelectScreen implements Screen {
             batch.end();
         }
 
-        // Draw button outlines and stage previews in buttons
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(0, 0, 0, 1); // Black for button outlines
-        for (Rectangle rect : stageButtons) {
-            shapeRenderer.rect(rect.x, rect.y, rect.width, rect.height);
-        }
-        shapeRenderer.end();
-
         batch.begin();
         for (int i = 0; i < stageButtons.length; i++) {
             batch.draw(stagePreviews[i], stageButtons[i].x, stageButtons[i].y, stageButtons[i].width, stageButtons[i].height);

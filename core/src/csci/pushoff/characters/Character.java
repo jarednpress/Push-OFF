@@ -106,6 +106,4 @@ public abstract class Character {
     public void dispose() {
         if (texture != null && texture.getTexture() != null) texture.getTexture().dispose();
     }
-
-    // Methods for actions like shove, trip, block, etc., can also be abstract if they vary by character
 }

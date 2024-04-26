@@ -108,14 +108,6 @@ public class CharacterSelectScreen implements Screen {
 
         batch.end();
 
-        // Now draw the button borders on top of everything
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(0, 0, 0, 1); // Black color for rectangles
-        shapeRenderer.rectLine(0, 0, 10, 10, 4); // Slightly thicker border
-        for (Rectangle rect : buttonRects) {
-            shapeRenderer.rect(rect.x, rect.y, rect.width, rect.height);
-        }
-        shapeRenderer.end();
 
         batch.begin();
         // Draw "Select Your Character" text and the character preview images onto the buttons
