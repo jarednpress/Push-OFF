@@ -18,7 +18,7 @@ public class StageThree extends StageTemplate {
     public void show() {
         super.show();
         background = new Texture("stage_3_background.jpg");
-        platform = new Texture("stage_1_platform.jpg"); //will be stage_3_platform.jpg
+        platform = new Texture("stage_3_platform.png"); //will be stage_3_platform.jpg
     }
 
     @Override
