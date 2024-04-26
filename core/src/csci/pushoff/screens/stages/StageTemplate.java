@@ -26,6 +26,8 @@ public class StageTemplate implements Screen {
     protected Texture player2Icon;
     protected Texture dot;
     protected Texture dotWinTexture;
+    protected Texture logoBlank;
+    protected Texture logo;
     protected Character playerOne;
     protected Character playerTwo;
     protected int stageWidth;
@@ -62,8 +64,10 @@ public class StageTemplate implements Screen {
         gameState = new GameState();
         player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.png");
         player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.png");
-        dot = new Texture("dot.jpg");
-        dotWinTexture = new Texture("dotWin.jpg");
+        dot = new Texture("dot.png");
+        dotWinTexture = new Texture("dotWin.png");
+        logoBlank = new Texture("logo.png");
+        logo = new Texture("logoWin.png");
 
         stageOffsetX = (Gdx.graphics.getWidth() - stageWidth) / 2f;
         playerOne = CharacterFactory.makeCharacter(game.getPlayerOneCharacterIndex(),stageOffsetX + 50, 300);
@@ -115,9 +119,9 @@ public class StageTemplate implements Screen {
         }
 
         // Draw the middle dot. Change it if one player wins.
-        Texture middleDotTexture = dot;
+        Texture middleDotTexture = logoBlank;
         if (scorePlayerOne >= 3 || scorePlayerTwo >= 3) {
-            middleDotTexture = dotWinTexture;
+            middleDotTexture = logo;
         }
         batch.draw(middleDotTexture, middleDotX, Gdx.graphics.getHeight() - largeDotSize - 20, largeDotSize, largeDotSize);
 
