@@ -247,8 +247,8 @@ public class StageTemplate implements Screen {
 
         handleCharacterCollision(delta);
 
-        checkCharacterStageBounds(playerOne);
-        checkCharacterStageBounds(playerTwo);
+        checkCharacterStageBounds(playerOne, playerTwo);
+        checkCharacterStageBounds(playerTwo, playerOne);
     }
 
     protected void freezeCharacter(Character character, float duration) {
@@ -286,7 +286,7 @@ public class StageTemplate implements Screen {
         if (overlap > -1) {
             float knockbackDistance = (initiator.shoveKnockback * receiver.friction) + (isKick ? 0 : 100);
             receiver.x += initiator.getFacingRight() ? knockbackDistance : -knockbackDistance;
-            checkCharacterStageBounds(receiver);
+            checkCharacterStageBounds(receiver, initiator);
             freezeCharacter(receiver, initiator.hitstunDuration / 4); // Freeze receiver briefly
         }
 
@@ -296,7 +296,7 @@ public class StageTemplate implements Screen {
 
 
 
-    protected void checkCharacterStageBounds(Character character) {
+    protected void checkCharacterStageBounds(Character character, Character opponent) {
         float characterMidpoint = character.x + character.getWidth() / 2f;
         boolean fellOffLeft = characterMidpoint < stageOffsetX;
         boolean fellOffRight = characterMidpoint > (stageOffsetX + stageWidth);
@@ -310,6 +310,7 @@ public class StageTemplate implements Screen {
                 gameState.incrementScore(true); // Score for Player One
             }
             // Delay reset to show who won the round
+            freezeCharacter(opponent, 2);
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
