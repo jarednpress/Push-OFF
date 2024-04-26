@@ -117,78 +117,100 @@ public class StageTemplate implements Screen {
 
     protected void updateCharacters(float delta) {
         // player 1 controls
-        if (playerOne.getFrames() > 1){ playerOne.setWidth(p1WidthWide); }
-        else{playerOne.setWidth(p1Width);}
-        playerOne.setFrames(playerOne.getFrames() - 1);
-        if(playerOne.getFrames() < 1){
-            if (!playerOne.isFrozen) {
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
-                        delta = delta / 4;
+        float p1StartStamina = playerOne.getStamina();
+        if (playerOne.getStamina() > 1) {
+            if (playerOne.getFrames() > 1){ playerOne.setWidth(p1WidthWide); }
+            else{playerOne.setWidth(p1Width);}
+            playerOne.setFrames(playerOne.getFrames() - 1);
+            if(playerOne.getFrames() < 1){
+                if (!playerOne.isFrozen) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                            delta = delta / 4;
+                        }
+                        playerOne.moveLeft(delta);
+                        playerOne.loseStamina(1);
                     }
-                    playerOne.moveLeft(delta);
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
-                        delta = delta / 4;
+                    if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                        if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                            delta = delta / 4;
+                        }
+                        playerOne.moveRight(delta);
+                        playerOne.loseStamina(1);
                     }
-                    playerOne.moveRight(delta);
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
-                    playerOne.currentState = Character.State.BLOCKING_LOW;
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.E)) {
-                    playerOne.currentState = Character.State.BLOCKING_HIGH;
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                    playerOne.currentState = Character.State.KICKING;
-                    performAction(playerOne, playerTwo, true);
-                    playerOne.setFrames(30);
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                    playerOne.currentState = Character.State.SHOVING;
-                    performAction(playerOne, playerTwo, false);
-                    playerOne.setFrames(60.5f); //.5 is to identify shove
+                    if (Gdx.input.isKeyPressed(Input.Keys.Q)) {
+                        playerOne.currentState = Character.State.BLOCKING_LOW;
+                        playerOne.loseStamina(1);
+                    }
+                    if (Gdx.input.isKeyPressed(Input.Keys.E)) {
+                        playerOne.currentState = Character.State.BLOCKING_HIGH;
+                        playerOne.loseStamina(1);
+                    }
+                    if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                        playerOne.currentState = Character.State.KICKING;
+                        performAction(playerOne, playerTwo, true);
+                        playerOne.setFrames(30);
+                        playerOne.loseStamina(2);
+                    }
+                    if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                        playerOne.currentState = Character.State.SHOVING;
+                        performAction(playerOne, playerTwo, false);
+                        playerOne.setFrames(60.5f); //.5 is to identify shove
+                        playerOne.loseStamina(3);
+                    }
                 }
             }
         }
+        else { freezeCharacter(playerOne, 3); }
+        if ((playerOne.getStamina() == p1StartStamina) && (playerOne.getStamina() < 400)) { playerOne.addStamina(); }
 
         //player 2 controls
-        if (playerTwo.getFrames() > 1){ playerTwo.setWidth(p2WidthWide); }
-        else{playerTwo.setWidth(p2Width);}
-        playerTwo.setFrames(playerTwo.getFrames() - 1);
-        if(playerTwo.getFrames() < 1) {
-            if (!playerTwo.isFrozen) {
-                if (Gdx.input.isKeyPressed(Input.Keys.J)) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)) {
-                        delta = delta / 4;
+        float p2StartStamina = playerTwo.getStamina();
+        if (playerTwo.getStamina() > 1){
+            if (playerTwo.getFrames() > 1){ playerTwo.setWidth(p2WidthWide); }
+            else{playerTwo.setWidth(p2Width);}
+            playerTwo.setFrames(playerTwo.getFrames() - 1);
+            if(playerTwo.getFrames() < 1) {
+                if (!playerTwo.isFrozen) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+                        if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)) {
+                            delta = delta / 4;
+                        }
+                        playerTwo.moveLeft(delta);
+                        playerTwo.loseStamina(1);
                     }
-                    playerTwo.moveLeft(delta);
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-                    if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)) {
-                        delta = delta / 4;
+                    if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+                        if (Gdx.input.isKeyPressed(Input.Keys.U) || Gdx.input.isKeyPressed(Input.Keys.O)) {
+                            delta = delta / 4;
+                        }
+                        playerTwo.moveRight(delta);
+                        playerTwo.loseStamina(1);
                     }
-                    playerTwo.moveRight(delta);
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.U)) {
-                    playerTwo.currentState = Character.State.BLOCKING_LOW;
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.O)) {
-                    playerTwo.currentState = Character.State.BLOCKING_HIGH;
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-                    playerTwo.currentState = Character.State.KICKING;
-                    performAction(playerTwo, playerOne, true);
-                    playerTwo.setFrames(30);
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.I)) {
-                    playerTwo.currentState = Character.State.SHOVING;
-                    performAction(playerTwo, playerOne, false);
-                    playerTwo.setFrames(60.5f); //.5 is to identify shove
+                    if (Gdx.input.isKeyPressed(Input.Keys.U)) {
+                        playerTwo.currentState = Character.State.BLOCKING_LOW;
+                        playerTwo.loseStamina(1);
+                    }
+                    if (Gdx.input.isKeyPressed(Input.Keys.O)) {
+                        playerTwo.currentState = Character.State.BLOCKING_HIGH;
+                        playerTwo.loseStamina(1);
+                    }
+                    if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+                        playerTwo.currentState = Character.State.KICKING;
+                        performAction(playerTwo, playerOne, true);
+                        playerTwo.setFrames(30);
+                        playerTwo.loseStamina(2);
+                    }
+                    if (Gdx.input.isKeyPressed(Input.Keys.I)) {
+                        playerTwo.currentState = Character.State.SHOVING;
+                        performAction(playerTwo, playerOne, false);
+                        playerTwo.setFrames(60.5f); //.5 is to identify shove
+                        playerTwo.loseStamina(3);
+                    }
                 }
             }
         }
+        else { freezeCharacter(playerTwo, 3); }
+        if ((playerTwo.getStamina() == p2StartStamina) && (playerTwo.getStamina() < 400)) { playerTwo.addStamina(); }
 
         handleCharacterCollision(delta);
 

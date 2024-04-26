@@ -30,6 +30,7 @@ public abstract class Character {
     protected boolean facingRight;
     public boolean isFrozen = false;
     protected float width, height;
+    protected float stamina;
     protected float frames;
 
 
@@ -45,7 +46,12 @@ public abstract class Character {
         this.width = width;
         this.height = height;
         this.frames = frames; //frame counter makes character animations stick during recovery
+        this.stamina = 400;
     }
+
+    public float getStamina(){ return this.stamina; }
+    public void addStamina(){ this.stamina += 1; }
+    public void loseStamina( int n ){ this.stamina -= n; }
 
     public float getFrames(){
         return this.frames;
@@ -66,12 +72,18 @@ public abstract class Character {
     //public abstract void draw(SpriteBatch batch);
 
     public void moveLeft(float delta) {
+        if(this.getStamina() < 100){
+            delta = delta / 5;
+        }
         x -= speed * delta;
         currentState = State.MOVING_LEFT;
         facingRight = false;
     }
 
     public void moveRight(float delta) {
+        if(this.getStamina() < 150){
+            delta = delta / 5;
+        }
         x += speed * delta;
         currentState = State.MOVING_RIGHT;
         facingRight = true;
