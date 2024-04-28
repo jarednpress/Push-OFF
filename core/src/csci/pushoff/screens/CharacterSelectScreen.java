@@ -122,12 +122,6 @@ public class CharacterSelectScreen implements Screen {
             if (playerOneSelection != -1 && playerTwoSelection != -1) {
                 game.setPlayerOneCharacterIndex(playerOneSelection);
                 game.setPlayerTwoCharacterIndex(playerTwoSelection);
-                //before continuing, load time allows players to see who the opponent chose
-                try {
-                    Thread.sleep(600); //fake load time adjustment
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
                 //this logic could be cleaned up, not very scalable
                 if (game.getStageIndex() == 0){
                     game.setScreen(new StageZero(game));

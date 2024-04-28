@@ -2,6 +2,7 @@ package csci.pushoff.screens;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +27,9 @@ public class TitleScreen implements Screen {
         img = new Texture("TitleBackground.png");
         font = new BitmapFont();
         font.getData().setScale(2); // Font size
+        Music menuMusic = Gdx.audio.newMusic(Gdx.files.internal("Pushoff_Theme-One.ogg"));
+        menuMusic.setLooping(true);
+        menuMusic.play();
     }
 
     @Override

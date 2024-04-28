@@ -173,13 +173,13 @@ public class StageTemplate implements Screen {
                         playerOne.currentState = Character.State.KICKING;
                         performAction(playerOne, playerTwo, true);
                         playerOne.setFrames(30);
-                        playerOne.loseStamina(2);
+                        playerOne.loseStamina(40);
                     }
                     if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                         playerOne.currentState = Character.State.SHOVING;
                         performAction(playerOne, playerTwo, false);
                         playerOne.setFrames(60.5f); //.5 is to identify shove
-                        playerOne.loseStamina(3);
+                        playerOne.loseStamina(80);
                     }
                 }
             }
@@ -223,13 +223,13 @@ public class StageTemplate implements Screen {
                         playerTwo.currentState = Character.State.KICKING;
                         performAction(playerTwo, playerOne, true);
                         playerTwo.setFrames(30);
-                        playerTwo.loseStamina(2);
+                        playerTwo.loseStamina(40);
                     }
                     if (Gdx.input.isKeyPressed(Input.Keys.I)) {
                         playerTwo.currentState = Character.State.SHOVING;
                         performAction(playerTwo, playerOne, false);
                         playerTwo.setFrames(60.5f); //.5 is to identify shove
-                        playerTwo.loseStamina(3);
+                        playerTwo.loseStamina(80);
                     }
                 }
             }
