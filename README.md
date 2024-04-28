@@ -1,7 +1,10 @@
-https://libgdx.com/wiki/start/a-simple-game
+Run as just an app: download PUSH_OFF.jar and run in terminal using:
+```
+java -jar PUSH_OFF.jar
+```
+note: java.jar may not be representitive of final version. is updated as of 'jar file test' commit.
 
-
-
+__________________________________
 Player 1 controls:
 
 ![wasd](https://github.com/jarednpress/Push-OFF/assets/112017486/10abb39d-f694-46c3-ba94-30d1b37933d3)
@@ -13,6 +16,7 @@ Player 2 Controls are same but on here:
 
 
 
+__________________________________
 
 here is how to run (double click on run in right-side gradle menu):
 
