@@ -1,7 +1,13 @@
-Run as just an app: download PUSH_OFF.jar and run in terminal using:
+Run as just an app: download PUSH_OFF.jar and run in linux terminal using:
 ```
 java -jar PUSH_OFF.jar
 ```
+On macos:
+```
+java -XstartOnFirstThread -jar PUSH_OFF.jar
+```
+Untested on Windows (we both use linux)
+
 note: java.jar may not be representitive of final version. is updated as of 'jar file test' commit.
 
 __________________________________
