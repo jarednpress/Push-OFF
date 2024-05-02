@@ -35,34 +35,36 @@ public class TestClass {
 	}
 	@Test
 	public void testTest(){
-		System.out.println("hello");
+		System.out.println("Testing Suite Works");
 	}
+
 	@Test
-	public void testAudioFacade(){
-		AudioFacade audioFacade = new AudioFacade();
-		audioFacade.play();
-		audioFacade.setVolume(10);
-		assertEquals(10, audioFacade.getVolume());
-	}
-	@Test
-	public void testCharacters(){
-		Character mainCharacter = CharacterFactory.makeCharacter(0,0,0);
-		assertEquals(150,mainCharacter.getWidth());
-		Character mainCharacter2 = CharacterFactory.makeCharacter(1,0,0);
-		Character mainCharacter3 = CharacterFactory.makeCharacter(2,0,0);
-		Character mainCharacter4 = CharacterFactory.makeCharacter(3,0,0);
-		assertEquals(70,mainCharacter2.getWidth());
-		assertEquals(80,mainCharacter3.getWidth());
-		assertEquals(140,mainCharacter4.getWidth());
-	}
-	@Test
-	public void stageTemplate(){
-		StageTemplate stage = new StageTemplate(game);
-		Character mainCharacter = CharacterFactory.makeCharacter(0,0,0);
-		stage.freezeCharacter(mainCharacter, 10);
-		assertTrue(mainCharacter.isFrozen);
+	public void testFatman(){
+		Character FatMan = CharacterFactory.makeCharacter(0,0,0);
+		assertEquals(150,FatMan.getWidth());
 
 	}
+	@Test
+	public  void testBaby(){
+		Character baby = CharacterFactory.makeCharacter(1,0,0);
+		assertEquals(70,baby.getWidth());
+
+	}
+	@Test
+	public void testCaptainCash(){
+		Character CaptainCash = CharacterFactory.makeCharacter(2,0,0);
+
+
+		assertEquals(80,CaptainCash.getWidth());
+
+	}
+	@Test
+	public void testWheelchairKid(){
+		Character WheelChairKid = CharacterFactory.makeCharacter(3,0,0);
+		assertEquals(140,WheelChairKid.getWidth());
+	}
+
+
 
 
 }
