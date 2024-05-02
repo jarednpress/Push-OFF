@@ -8,7 +8,7 @@ java -XstartOnFirstThread -jar PUSH_OFF.jar
 ```
 Untested on Windows (we both use linux)
 
-note: java.jar may not be representitive of final version. is updated as of 'jar file test' commit.
+note: java.jar may not be representitive of final version. is updated as of 'update jar file' commit.
 
 __________________________________
 
