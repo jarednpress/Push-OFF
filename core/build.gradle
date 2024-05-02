@@ -3,4 +3,5 @@ sourceCompatibility = 1.8
 
 sourceSets.main.java.srcDirs = [ "src/main" ]
 sourceSets.test.java.srcDirs = [ "src/test/java"]
+sourceSets.main.resources.srcDirs = ["../../assets"]
 eclipse.project.name = appName + "-core"

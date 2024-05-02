@@ -138,7 +138,7 @@ public class StageTemplate implements Screen {
         shapeRenderer.end();
     }
 
-    protected void updateCharacters(float delta) {
+    public void updateCharacters(float delta) {
         // player 1 controls
         float p1StartStamina = playerOne.getStamina();
         if (playerOne.getStamina() > 1) {
@@ -245,7 +245,7 @@ public class StageTemplate implements Screen {
         checkCharacterStageBounds(playerTwo, playerOne);
     }
 
-    protected void freezeCharacter(Character character, float duration) {
+    public void freezeCharacter(Character character, float duration) {
         character.isFrozen = true;
 
         // Schedule a task to unfreeze the character after the given duration
@@ -257,7 +257,7 @@ public class StageTemplate implements Screen {
         }, duration); // Duration is in seconds
     }
 
-    protected void performAction(Character initiator, Character receiver, boolean isKick) {
+    public void performAction(Character initiator, Character receiver, boolean isKick) {
         // `isKick` true for kick, false for shove
         if (Gdx.input.isKeyPressed(Input.Keys.E) || Gdx.input.isKeyPressed(Input.Keys.O)) {
             receiver.currentState = Character.State.BLOCKING_HIGH;
@@ -287,7 +287,7 @@ public class StageTemplate implements Screen {
         freezeCharacter(initiator, initiator.hitstunDuration / 2);
     }
 
-    protected void checkCharacterStageBounds(Character character, Character opponent) {
+    public void checkCharacterStageBounds(Character character, Character opponent) {
         float characterMidpoint = character.x + character.getWidth() / 2f;
         boolean fellOffLeft = characterMidpoint < stageOffsetX;
         boolean fellOffRight = characterMidpoint > (stageOffsetX + stageWidth);
@@ -322,7 +322,7 @@ public class StageTemplate implements Screen {
         }
     }
 
-    protected void handleCharacterCollision(float delta) {
+    public void handleCharacterCollision(float delta) {
         float overlap = (playerOne.getWidth() / 2 + playerTwo.getWidth() / 2) - Math.abs((playerOne.x + playerOne.getWidth() / 2) - (playerTwo.x + playerTwo.getWidth() / 2));
 
         if (overlap > 0) {
@@ -351,7 +351,7 @@ public class StageTemplate implements Screen {
         }
     }
 
-    protected void pushCharacter(Character pusher, Character idleCharacter, float delta, float overlap) {
+    public void pushCharacter(Character pusher, Character idleCharacter, float delta, float overlap) {
         // If the idle character is being pushed, adjust the speed by their friction
         float effectiveSpeed = pusher.speed * idleCharacter.friction;
 
@@ -366,7 +366,7 @@ public class StageTemplate implements Screen {
         }
     }
 
-    protected void resetStage() {
+   public  void resetStage() {
         // Reset characters to their starting positions
         playerOne.x = stageOffsetX + 50;
         playerOne.y = 300;

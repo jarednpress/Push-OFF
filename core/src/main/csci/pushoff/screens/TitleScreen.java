@@ -2,7 +2,6 @@ package csci.pushoff.screens;
 import csci.pushoff.AudioFacade;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -16,6 +15,7 @@ public class TitleScreen implements Screen {
     private SpriteBatch batch;
     private Texture img;
     private BitmapFont font;
+    private AudioFacade Theme;
 
     public TitleScreen(GdxGameMain game) {
         this.game = game;
@@ -27,7 +27,7 @@ public class TitleScreen implements Screen {
         img = new Texture("TitleBackground.png");
         font = new BitmapFont();
         font.getData().setScale(2); // Font size
-        AudioFacade Theme = new AudioFacade();
+        Theme = new AudioFacade();
         Theme.play();
     }
 
@@ -65,5 +65,6 @@ public class TitleScreen implements Screen {
         batch.dispose();
         img.dispose();
         font.dispose();
+        //Theme.stop();
     }
 }
