@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.Timer;
-import csci.pushoff.GameState;
+import csci.pushoff.GameAdapter;
 import csci.pushoff.GdxGameMain;
 import com.badlogic.gdx.Input;
 import csci.pushoff.characters.Character;
@@ -34,7 +34,7 @@ public class StageTemplate implements Screen {
     protected float p1WidthWide;
     protected float p2Width;
     protected float p2WidthWide;
-    protected GameState gameState;
+    protected GameAdapter gameAdapter;
 
 
     // Fixed dot size, doubled
@@ -59,7 +59,7 @@ public class StageTemplate implements Screen {
     public void show() {
         batch = new SpriteBatch();
         font = new BitmapFont();
-        gameState = new GameState();
+        gameAdapter = new GameAdapter();
         player1Icon = new Texture("character" + game.getPlayerOneCharacterIndex() + "Preview.png");
         player2Icon = new Texture("character" + game.getPlayerTwoCharacterIndex() + "Preview.png");
         dot = new Texture("dot.png");
@@ -99,8 +99,8 @@ public class StageTemplate implements Screen {
         float middleDotX = centerX - largeDotSize / 2; // Center the middle dot
         float spaceBetweenDots = dotSpacing + dotSize; // Total space between the centers of the dots
         // Update drawing based on the current scores
-        int scorePlayerOne = gameState.getScorePlayerOne();
-        int scorePlayerTwo = gameState.getScorePlayerTwo();
+        int scorePlayerOne = gameAdapter.getScorePlayerOne();
+        int scorePlayerTwo = gameAdapter.getScorePlayerTwo();
         // Draw player one's dots
         for (int i = 0; i < 2; i++) {
             Texture currentTexture = i < scorePlayerOne ? dotWinTexture : dot;
@@ -292,8 +292,8 @@ public class StageTemplate implements Screen {
         boolean fellOffLeft = characterMidpoint < stageOffsetX;
         boolean fellOffRight = characterMidpoint > (stageOffsetX + stageWidth);
 
-        if ((fellOffLeft || fellOffRight) && !gameState.isWaitingForReset()) {
-            gameState.setWaitingForReset(true); // Prevent further score updates until reset
+        if ((fellOffLeft || fellOffRight) && !gameAdapter.isWaitingForReset()) {
+            gameAdapter.setWaitingForReset(true); // Prevent further score updates until reset
 
             //set fallen character to be 10 pixels away from side they fell from
             character.y = 0;
@@ -301,9 +301,9 @@ public class StageTemplate implements Screen {
             } else { character.x = stageOffsetX + stageWidth + 10; }
 
             if (character == playerOne) {
-                gameState.incrementScore(false); // Score for Player Two
+                gameAdapter.incrementScore(false); // Score for Player Two
             } else if (character == playerTwo) {
-                gameState.incrementScore(true); // Score for Player One
+                gameAdapter.incrementScore(true); // Score for Player One
             }
 
             // Delay reset to show who won the round
@@ -311,10 +311,10 @@ public class StageTemplate implements Screen {
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    if (gameState.getScorePlayerOne() >= 3) {
-                        game.setScreen(new WinScreen(game,gameState));
-                    } else if (gameState.getScorePlayerTwo() >= 3) {
-                        game.setScreen(new WinScreen(game,gameState));
+                    if (gameAdapter.getScorePlayerOne() >= 3) {
+                        game.setScreen(new WinScreen(game, gameAdapter));
+                    } else if (gameAdapter.getScorePlayerTwo() >= 3) {
+                        game.setScreen(new WinScreen(game, gameAdapter));
                     }
                     resetStage();
                 }
@@ -381,7 +381,7 @@ public class StageTemplate implements Screen {
         playerOne.refillStamina();
         playerTwo.refillStamina();
 
-        gameState.setWaitingForReset(false); // Allow score updates again
+        gameAdapter.setWaitingForReset(false); // Allow score updates again
     }
 
 

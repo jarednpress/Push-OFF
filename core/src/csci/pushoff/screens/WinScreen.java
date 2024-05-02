@@ -7,13 +7,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.ScreenUtils;
-import csci.pushoff.GameState;
+import csci.pushoff.GameAdapter;
 import csci.pushoff.GdxGameMain;
 
 public class WinScreen implements Screen {
 
     protected GdxGameMain game;
-    protected GameState gameState;
+    protected GameAdapter gameAdapter;
     private SpriteBatch batch;
     private Texture player1Icon;
     private Texture player2Icon;
@@ -22,10 +22,10 @@ public class WinScreen implements Screen {
     private Texture img;
     private BitmapFont font;
 
-    public WinScreen(GdxGameMain game, GameState gameState) {
+    public WinScreen(GdxGameMain game, GameAdapter gameAdapter) {
 
         this.game = game;
-        this.gameState = gameState;
+        this.gameAdapter = gameAdapter;
     }
 
     @Override
@@ -50,7 +50,7 @@ public class WinScreen implements Screen {
 
         batch.begin();
 
-        if(gameState.getScorePlayerOne()>gameState.getScorePlayerTwo()){
+        if(gameAdapter.getScorePlayerOne()> gameAdapter.getScorePlayerTwo()){
             batch.draw(player1Icon, Gdx.graphics.getWidth() / 2f - player2Icon.getWidth() / 2f, Gdx.graphics.getHeight() / 2f - player1Icon.getHeight() / 2f);
             batch.draw(player_one_wins,Gdx.graphics.getWidth() / 2f - player_one_wins.getWidth() / 2f, Gdx.graphics.getHeight() * 0.75f );
         }

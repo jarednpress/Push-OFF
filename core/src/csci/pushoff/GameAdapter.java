@@ -1,6 +1,6 @@
 package csci.pushoff;
 
-public class GameState {
+public class GameAdapter {
     private int scorePlayerOne = 0;
     private int scorePlayerTwo = 0;
     private boolean waitingForReset = false;
